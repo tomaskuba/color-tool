@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brand Color Tool</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Ccircle cx='50' cy='50' r='45'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M50 50L50 5A45 45 0 0 1 72.5 11.03Z' fill='%23ff0040'/%3E%3Cpath d='M50 50L72.5 11.03A45 45 0 0 1 88.97 27.5Z' fill='%23ff0000'/%3E%3Cpath d='M50 50L88.97 27.5A45 45 0 0 1 95 50Z' fill='%23ff8000'/%3E%3Cpath d='M50 50L95 50A45 45 0 0 1 88.97 72.5Z' fill='%23ffff00'/%3E%3Cpath d='M50 50L88.97 72.5A45 45 0 0 1 72.5 88.97Z' fill='%2380ff00'/%3E%3Cpath d='M50 50L72.5 88.97A45 45 0 0 1 50 95Z' fill='%2300ff00'/%3E%3Cpath d='M50 50L50 95A45 45 0 0 1 27.5 88.97Z' fill='%2300ff80'/%3E%3Cpath d='M50 50L27.5 88.97A45 45 0 0 1 11.03 72.5Z' fill='%2300ffff'/%3E%3Cpath d='M50 50L11.03 72.5A45 45 0 0 1 5 50Z' fill='%230080ff'/%3E%3Cpath d='M50 50L5 50A45 45 0 0 1 11.03 27.5Z' fill='%230000ff'/%3E%3Cpath d='M50 50L11.03 27.5A45 45 0 0 1 27.5 11.03Z' fill='%238000ff'/%3E%3Cpath d='M50 50L27.5 11.03A45 45 0 0 1 50 5Z' fill='%23ff00ff'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='46' fill='none' stroke='%231a1a2e' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Ccircle cx='50' cy='50' r='45'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M50 50L50 5A45 45 0 0 1 72.5 11.03Z' fill='%23ff0040'/%3E%3Cpath d='M50 50L72.5 11.03A45 45 0 0 1 88.97 27.5Z' fill='%23ff0000'/%3E%3Cpath d='M50 50L88.97 27.5A45 45 0 0 1 95 50Z' fill='%23ff8000'/%3E%3Cpath d='M50 50L95 50A45 45 0 0 1 88.97 72.5Z' fill='%23ffff00'/%3E%3Cpath d='M50 50L88.97 72.5A45 45 0 0 1 72.5 88.97Z' fill='%2380ff00'/%3E%3Cpath d='M50 50L72.5 88.97A45 45 0 0 1 50 95Z' fill='%2300ff00'/%3E%3Cpath d='M50 50L50 95A45 45 0 0 1 27.5 88.97Z' fill='%2300ff80'/%3E%3Cpath d='M50 50L27.5 88.97A45 45 0 0 1 11.03 72.5Z' fill='%2300ffff'/%3E%3Cpath d='M50 50L11.03 72.5A45 45 0 0 1 5 50Z' fill='%230080ff'/%3E%3Cpath d='M50 50L5 50A45 45 0 0 1 11.03 27.5Z' fill='%230000ff'/%3E%3Cpath d='M50 50L11.03 27.5A45 45 0 0 1 27.5 11.03Z' fill='%238000ff'/%3E%3Cpath d='M50 50L27.5 11.03A45 45 0 0 1 50 5Z' fill='%23ff00ff'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
@@ -12,10 +12,54 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg-body: #181818;
+      --bg-surface: #222;
+      --bg-input: #2a2a2a;
+      --bg-btn: #3a3a3a;
+      --bg-btn-hover: #4a4a4a;
+      --border-color: #333;
+      --border-subtle: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.25);
+      --text-primary: #e8e8ec;
+      --text-secondary: #c0c0c8;
+      --text-muted: #999;
+      --text-on-surface: #fff;
+      --accent: #888;
+      --toggle-active: #666;
+      --toggle-dot: #aaa;
+      --shadow: rgba(0,0,0,0.4);
+      --base-marker-bg: rgba(255,255,255,0.06);
+      --shade-step-color: #666;
+      color-scheme: dark;
+    }
+
+    [data-theme="light"] {
+      --bg-body: #f0f0f0;
+      --bg-surface: #fff;
+      --bg-input: #e8e8e8;
+      --bg-btn: #d0d0d0;
+      --bg-btn-hover: #bbb;
+      --border-color: #ccc;
+      --border-subtle: rgba(0,0,0,0.08);
+      --border-hover: rgba(0,0,0,0.25);
+      --text-primary: #1a1a1a;
+      --text-secondary: #444;
+      --text-muted: #777;
+      --text-on-surface: #111;
+      --accent: #888;
+      --toggle-active: #555;
+      --toggle-dot: #999;
+      --shadow: rgba(0,0,0,0.15);
+      --base-marker-bg: rgba(0,0,0,0.06);
+      --shade-step-color: #999;
+      color-scheme: light;
+    }
+
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #1a1a2e;
-      color: #e0e0e0;
+      background: var(--bg-body);
+      color: var(--text-primary);
       min-height: 100vh;
       padding: 24px;
     }
@@ -28,7 +72,7 @@
       align-items: center;
       margin-bottom: 24px;
       padding: 16px;
-      background: #16213e;
+      background: var(--bg-surface);
       border-radius: 12px;
     }
 
@@ -42,14 +86,14 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #c0c0c8;
+      color: var(--text-secondary);
     }
 
     .setting-group input[type="text"],
     .setting-group select {
-      background: #0f3460;
-      border: 1px solid #333;
-      color: #fff;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-on-surface);
       padding: 6px 10px;
       border-radius: 6px;
       font-size: 14px;
@@ -57,12 +101,12 @@
 
     .setting-group input[type="range"] {
       width: 120px;
-      accent-color: #5c7cfa;
+      accent-color: var(--accent);
     }
 
     .font-size-value {
       font-size: 12px;
-      color: #e8e8ec;
+      color: var(--text-primary);
       min-width: 40px;
     }
 
@@ -79,13 +123,13 @@
     .btn:hover { opacity: 0.85; }
 
     .btn-undo {
-      background: #374151;
-      color: #e8e8ec;
+      background: var(--bg-btn);
+      color: var(--text-primary);
     }
 
     .btn-export {
-      background: #10b981;
-      color: #fff;
+      background: var(--bg-btn);
+      color: var(--text-primary);
     }
 
     .btn-undo:disabled {
@@ -102,7 +146,7 @@
     }
 
     .picker-card {
-      background: #16213e;
+      background: var(--bg-surface);
       border-radius: 12px;
       padding: 16px;
       display: flex;
@@ -116,7 +160,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #e8e8ec;
+      color: var(--text-primary);
     }
 
     .hex-row {
@@ -128,9 +172,9 @@
 
     .hex-input {
       flex: 1;
-      background: #0f3460;
-      border: 1px solid #333;
-      color: #fff;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-on-surface);
       padding: 6px 8px;
       border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
@@ -139,8 +183,8 @@
     }
 
     .btn-copy {
-      background: #374151;
-      color: #e8e8ec;
+      background: var(--bg-btn);
+      color: var(--text-primary);
       border: none;
       border-radius: 6px;
       padding: 6px;
@@ -152,13 +196,13 @@
     }
     .btn-copy svg { width: 16px; height: 16px; }
 
-    .btn-copy:hover { background: #4b5563; }
+    .btn-copy:hover { background: var(--bg-btn-hover); }
     .btn-copy.copied { background: #22c55e; color: #fff; }
     .btn-copy.copied svg { stroke: #fff; }
 
     .btn-pick {
-      background: #374151;
-      color: #e8e8ec;
+      background: var(--bg-btn);
+      color: var(--text-primary);
       border: none;
       border-radius: 6px;
       padding: 6px;
@@ -170,11 +214,11 @@
     }
     .btn-pick svg { width: 16px; height: 16px; }
 
-    .btn-pick:hover { background: #4b5563; }
+    .btn-pick:hover { background: var(--bg-btn-hover); }
 
     /* Color wheel viz */
     .viz-card {
-      background: #16213e;
+      background: var(--bg-surface);
       border-radius: 12px;
       padding: 16px;
       display: flex;
@@ -188,7 +232,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #e8e8ec;
+      color: var(--text-primary);
     }
 
     .viz-legend {
@@ -207,7 +251,7 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      border: 1px solid #fff;
+      border: 1px solid var(--text-on-surface);
     }
 
     /* Contrast grid */
@@ -233,13 +277,13 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid var(--border-subtle);
       border-bottom: none;
       transition: border-color 0.3s;
     }
 
     .contrast-panel:hover {
-      border-color: rgba(255,255,255,0.3);
+      border-color: var(--border-hover);
     }
 
     .panel-label {
@@ -259,14 +303,14 @@
     }
 
     .panel-info {
-      background: #16213e;
+      background: var(--bg-surface);
       border-radius: 0 0 12px 12px;
       padding: 8px 12px;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid var(--border-subtle);
       border-top: none;
     }
 
@@ -274,7 +318,7 @@
       font-family: system-ui, sans-serif;
       font-size: 14px;
       font-weight: 600;
-      color: #e0e0e0;
+      color: var(--text-primary);
     }
 
     .panel-badges {
@@ -323,7 +367,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #e8e8ec;
+      color: var(--text-primary);
       margin-bottom: 16px;
     }
 
@@ -344,9 +388,9 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #e8e8ec;
+      color: var(--text-primary);
       padding: 8px 10px;
-      background: #16213e;
+      background: var(--bg-surface);
       border-radius: 12px 12px 0 0;
       display: grid;
       grid-template-columns: 72px 1fr 1fr 1fr;
@@ -356,7 +400,7 @@
 
     .shades-column-header .shade-sub {
       font-size: 11px;
-      color: #999;
+      color: var(--text-muted);
       text-align: left;
     }
 
@@ -366,14 +410,14 @@
       align-items: center;
       gap: 0 8px;
       height: 48px;
-      border-left: 1px solid rgba(255,255,255,0.05);
-      border-right: 1px solid rgba(255,255,255,0.05);
-      background: #16213e;
+      border-left: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
       padding-right: 10px;
     }
 
     .shade-row:last-child {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid var(--border-subtle);
       border-radius: 0 0 12px 12px;
       overflow: hidden;
     }
@@ -395,18 +439,18 @@
 
     .shade-step {
       font-size: 11px;
-      color: #666;
+      color: var(--shade-step-color);
     }
 
     .shade-hex {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      color: #e8e8ec;
+      color: var(--text-primary);
       cursor: pointer;
     }
 
     .shade-hex:hover {
-      color: #fff;
+      color: var(--text-on-surface);
     }
 
     .shade-contrast-group {
@@ -421,12 +465,12 @@
     }
 
     .shade-base-marker {
-      background: rgba(255,255,255,0.06) !important;
+      background: var(--base-marker-bg) !important;
       height: 88px;
     }
 
     .shade-base-marker .shade-step {
-      color: #e8e8ec;
+      color: var(--text-primary);
       font-weight: 700;
     }
 
@@ -466,7 +510,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #e8e8ec;
+      color: var(--text-primary);
       margin: 0;
     }
 
@@ -475,7 +519,7 @@
       align-items: center;
       gap: 8px;
       font-size: 12px;
-      color: #c0c0c8;
+      color: var(--text-secondary);
       cursor: pointer;
     }
 
@@ -483,7 +527,7 @@
       position: relative;
       width: 36px;
       height: 20px;
-      background: #374151;
+      background: var(--bg-btn);
       border-radius: 10px;
       transition: background 0.2s;
       flex-shrink: 0;
@@ -496,7 +540,7 @@
       left: 2px;
       width: 16px;
       height: 16px;
-      background: #aaa;
+      background: var(--toggle-dot);
       border-radius: 50%;
       transition: transform 0.2s, background 0.2s;
     }
@@ -506,12 +550,12 @@
     }
 
     .toggle-input:checked + .toggle-label .toggle-switch {
-      background: #5c7cfa;
+      background: var(--toggle-active);
     }
 
     .toggle-input:checked + .toggle-label .toggle-switch::after {
       transform: translateX(16px);
-      background: #fff;
+      background: var(--text-on-surface);
     }
 
     /* Swatch label */
@@ -568,7 +612,7 @@
     .shade-text-panel {
       border-radius: 12px;
       padding: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid var(--border-subtle);
     }
 
     .shade-text-panel-header {
@@ -629,12 +673,12 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #16213e;
-      color: #fff;
+      background: var(--bg-surface);
+      color: var(--text-on-surface);
       padding: 12px 20px;
       border-radius: 8px;
       font-size: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 20px var(--shadow);
       transform: translateY(100px);
       opacity: 0;
       transition: all 0.3s;
@@ -703,6 +747,7 @@
   <div style="flex:1"></div>
   <button class="btn btn-undo" id="undoBtn" disabled title="Ctrl+Z">↩ Undo</button>
   <button class="btn btn-export" id="exportCoolorsBtn" title="Open palette in Coolors.co">🎨 Coolors.co</button>
+  <button class="btn btn-theme" id="themeToggle" title="Switch theme">☀ Light</button>
 </div>
 
 <!-- Pickers + Viz -->
@@ -1399,6 +1444,19 @@ document.getElementById('exportCoolorsBtn').addEventListener('click', () => {
   const url = `https://coolors.co/${strip(pickers.primary.color.hexString)}-${strip(pickers.secondary.color.hexString)}-${strip(pickers.darkBg.color.hexString)}-${strip(pickers.lightBg.color.hexString)}`;
   window.open(url, '_blank');
 });
+
+// Theme toggle
+const themeToggle = document.getElementById('themeToggle');
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  themeToggle.textContent = theme === 'light' ? '☾ Dark' : '☀ Light';
+  sessionStorage.setItem('brand-color-tool-theme', theme);
+}
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+applyTheme(sessionStorage.getItem('brand-color-tool-theme') || 'dark');
 
 // --- Toast ---
 function showToast(msg) {
