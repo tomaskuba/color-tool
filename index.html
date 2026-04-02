@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brand Color Tool</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Ccircle cx='50' cy='50' r='45'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M50 50L50 5A45 45 0 0 1 72.5 11.03Z' fill='%23ff0040'/%3E%3Cpath d='M50 50L72.5 11.03A45 45 0 0 1 88.97 27.5Z' fill='%23ff0000'/%3E%3Cpath d='M50 50L88.97 27.5A45 45 0 0 1 95 50Z' fill='%23ff8000'/%3E%3Cpath d='M50 50L95 50A45 45 0 0 1 88.97 72.5Z' fill='%23ffff00'/%3E%3Cpath d='M50 50L88.97 72.5A45 45 0 0 1 72.5 88.97Z' fill='%2380ff00'/%3E%3Cpath d='M50 50L72.5 88.97A45 45 0 0 1 50 95Z' fill='%2300ff00'/%3E%3Cpath d='M50 50L50 95A45 45 0 0 1 27.5 88.97Z' fill='%2300ff80'/%3E%3Cpath d='M50 50L27.5 88.97A45 45 0 0 1 11.03 72.5Z' fill='%2300ffff'/%3E%3Cpath d='M50 50L11.03 72.5A45 45 0 0 1 5 50Z' fill='%230080ff'/%3E%3Cpath d='M50 50L5 50A45 45 0 0 1 11.03 27.5Z' fill='%230000ff'/%3E%3Cpath d='M50 50L11.03 27.5A45 45 0 0 1 27.5 11.03Z' fill='%238000ff'/%3E%3Cpath d='M50 50L27.5 11.03A45 45 0 0 1 50 5Z' fill='%23ff00ff'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='46' fill='none' stroke='%231a1a2e' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,7 +42,7 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #888;
+      color: #c0c0c8;
     }
 
     .setting-group input[type="text"],
@@ -61,7 +62,7 @@
 
     .font-size-value {
       font-size: 12px;
-      color: #aaa;
+      color: #e8e8ec;
       min-width: 40px;
     }
 
@@ -79,7 +80,7 @@
 
     .btn-undo {
       background: #374151;
-      color: #e0e0e0;
+      color: #e8e8ec;
     }
 
     .btn-export {
@@ -115,7 +116,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #aaa;
+      color: #e8e8ec;
     }
 
     .hex-row {
@@ -139,27 +140,35 @@
 
     .btn-copy {
       background: #374151;
-      color: #ccc;
+      color: #e8e8ec;
       border: none;
       border-radius: 6px;
-      padding: 6px 8px;
+      padding: 6px;
       cursor: pointer;
-      font-size: 12px;
       transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    .btn-copy svg { width: 16px; height: 16px; }
 
     .btn-copy:hover { background: #4b5563; }
     .btn-copy.copied { background: #22c55e; color: #fff; }
+    .btn-copy.copied svg { stroke: #fff; }
 
     .btn-pick {
       background: #374151;
+      color: #e8e8ec;
       border: none;
       border-radius: 6px;
-      padding: 4px 8px;
+      padding: 6px;
       cursor: pointer;
-      font-size: 14px;
       transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    .btn-pick svg { width: 16px; height: 16px; }
 
     .btn-pick:hover { background: #4b5563; }
 
@@ -179,7 +188,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #aaa;
+      color: #e8e8ec;
     }
 
     .viz-legend {
@@ -314,7 +323,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #aaa;
+      color: #e8e8ec;
       margin-bottom: 16px;
     }
 
@@ -335,7 +344,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #aaa;
+      color: #e8e8ec;
       padding: 8px 10px;
       background: #16213e;
       border-radius: 12px 12px 0 0;
@@ -392,7 +401,7 @@
     .shade-hex {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      color: #ccc;
+      color: #e8e8ec;
       cursor: pointer;
     }
 
@@ -417,7 +426,7 @@
     }
 
     .shade-base-marker .shade-step {
-      color: #aaa;
+      color: #e8e8ec;
       font-weight: 700;
     }
 
@@ -457,7 +466,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #aaa;
+      color: #e8e8ec;
       margin: 0;
     }
 
@@ -466,7 +475,7 @@
       align-items: center;
       gap: 8px;
       font-size: 12px;
-      color: #888;
+      color: #c0c0c8;
       cursor: pointer;
     }
 
@@ -657,11 +666,32 @@
 <div class="settings-bar">
   <div class="setting-group">
     <label>Preview text</label>
-    <input type="text" id="previewText" value="Advea" style="width:160px">
+    <input type="text" id="previewText" value="Brand" style="width:160px">
   </div>
   <div class="setting-group">
     <label>Font</label>
     <select id="fontSelect"></select>
+  </div>
+  <div class="setting-group">
+    <label>Weight</label>
+    <select id="fontWeight">
+      <option value="100">100 Thin</option>
+      <option value="200">200 ExtraLight</option>
+      <option value="300">300 Light</option>
+      <option value="400" selected>400 Regular</option>
+      <option value="500">500 Medium</option>
+      <option value="600">600 SemiBold</option>
+      <option value="700">700 Bold</option>
+      <option value="800">800 ExtraBold</option>
+      <option value="900">900 Black</option>
+    </select>
+  </div>
+  <div class="setting-group">
+    <label>Italic</label>
+    <label class="toggle-label" style="margin-top:4px">
+      <input type="checkbox" id="fontItalic" class="toggle-input">
+      <span class="toggle-switch"></span>
+    </label>
   </div>
   <div class="setting-group">
     <label>Font size</label>
@@ -682,7 +712,7 @@
     <div id="pickerPrimary"></div>
     <div class="hex-row">
       <input class="hex-input" id="hexPrimary" value="#e8192c" spellcheck="false">
-      <button class="btn-copy" data-target="hexPrimary">Copy</button><button class="btn-pick" data-picker="primary" hidden>💧</button>
+      <button class="btn-copy" data-target="hexPrimary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="primary" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
   </div>
   <div class="picker-card">
@@ -690,7 +720,7 @@
     <div id="pickerSecondary"></div>
     <div class="hex-row">
       <input class="hex-input" id="hexSecondary" value="#00c8d5" spellcheck="false">
-      <button class="btn-copy" data-target="hexSecondary">Copy</button><button class="btn-pick" data-picker="secondary" hidden>💧</button>
+      <button class="btn-copy" data-target="hexSecondary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="secondary" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
   </div>
   <div class="picker-card">
@@ -698,7 +728,7 @@
     <div id="pickerDarkBg"></div>
     <div class="hex-row">
       <input class="hex-input" id="hexDarkBg" value="#000000" spellcheck="false">
-      <button class="btn-copy" data-target="hexDarkBg">Copy</button><button class="btn-pick" data-picker="darkBg" hidden>💧</button>
+      <button class="btn-copy" data-target="hexDarkBg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="darkBg" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
   </div>
   <div class="picker-card">
@@ -706,7 +736,7 @@
     <div id="pickerLightBg"></div>
     <div class="hex-row">
       <input class="hex-input" id="hexLightBg" value="#ffffff" spellcheck="false">
-      <button class="btn-copy" data-target="hexLightBg">Copy</button><button class="btn-pick" data-picker="lightBg" hidden>💧</button>
+      <button class="btn-copy" data-target="hexLightBg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="lightBg" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
   </div>
   <div class="viz-card">
@@ -815,9 +845,9 @@
 <script>
 // --- Google Fonts ---
 const FONTS = [
-  'Taviraj', 'Inter', 'Roboto', 'Open Sans', 'Montserrat', 'Playfair Display',
+  'Outfit', 'Inter', 'Roboto', 'Open Sans', 'Montserrat', 'Playfair Display',
   'Lora', 'Merriweather', 'Poppins', 'Raleway', 'Oswald', 'Source Sans 3',
-  'Nunito', 'PT Sans', 'Work Sans', 'Fira Sans', 'DM Sans', 'Outfit',
+  'Nunito', 'PT Sans', 'Work Sans', 'Fira Sans', 'DM Sans', 'Taviraj',
   'Space Grotesk', 'IBM Plex Sans', 'Bitter', 'Crimson Text', 'Libre Baskerville',
   'EB Garamond', 'Cormorant Garamond', 'Josefin Sans', 'Quicksand', 'Comfortaa',
   'Archivo', 'Barlow', 'Rubik', 'Karla', 'Manrope', 'Plus Jakarta Sans',
@@ -833,13 +863,14 @@ FONTS.forEach(f => {
   fontSelect.appendChild(opt);
 });
 
-function loadFont(family) {
-  const id = 'gfont-' + family.replace(/\s+/g, '-');
+function loadFont(family, weight = '400', italic = false) {
+  const ital = italic ? '1' : '0';
+  const id = `gfont-${family.replace(/\s+/g, '-')}-${weight}-${ital}`;
   if (document.getElementById(id)) return;
   const link = document.createElement('link');
   link.id = id;
   link.rel = 'stylesheet';
-  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}:wght@400;700&display=swap`;
+  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}:ital,wght@${ital},${weight}&display=swap`;
   document.head.appendChild(link);
 }
 
@@ -1016,7 +1047,9 @@ for (const [key, inputId] of Object.entries(pickerHexMap)) {
 for (const [key, inputId] of Object.entries(pickerHexMap)) {
   const input = document.getElementById(inputId);
   input.addEventListener('input', () => {
-    const val = input.value.trim();
+    let val = input.value.trim().replace(/^#+/, '#');
+    if (!val.startsWith('#')) val = '#' + val;
+    if (val !== input.value) input.value = val;
     if (/^#[0-9a-f]{6}$/i.test(val)) {
       isRestoring = true;
       pickers[key].color.hexString = val;
@@ -1031,13 +1064,15 @@ for (const [key, inputId] of Object.entries(pickerHexMap)) {
 }
 
 // Copy buttons
+const COPY_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+const CHECK_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 document.querySelectorAll('.btn-copy').forEach(btn => {
   btn.addEventListener('click', () => {
     const hex = document.getElementById(btn.dataset.target).value;
-    navigator.clipboard.writeText(hex).then(() => {
+    navigator.clipboard.writeText(hex.replace('#', '')).then(() => {
       btn.classList.add('copied');
-      btn.textContent = '✓';
-      setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1000);
+      btn.innerHTML = CHECK_ICON;
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = COPY_ICON; }, 1000);
     });
   });
 });
@@ -1055,9 +1090,11 @@ const panelConfigs = [
 ];
 
 function updateAllPreviews() {
-  const previewText = document.getElementById('previewText').value || 'Advea';
+  const previewText = document.getElementById('previewText').value || 'Brand';
   const fontFamily = fontSelect.value;
   const fontSize = document.getElementById('fontSize').value + 'px';
+  const fontWeight = document.getElementById('fontWeight').value;
+  const fontItalic = document.getElementById('fontItalic').checked;
 
   panelConfigs.forEach(cfg => {
     const panel = document.getElementById(cfg.id);
@@ -1071,6 +1108,8 @@ function updateAllPreviews() {
     preview.textContent = previewText;
     preview.style.fontFamily = `'${fontFamily}', serif`;
     preview.style.fontSize = fontSize;
+    preview.style.fontWeight = fontWeight;
+    preview.style.fontStyle = fontItalic ? 'italic' : 'normal';
 
     const ratio = contrastRatio(textColor, bgColor);
     document.querySelector(`.panel-ratio[data-panel="${cfg.id}"]`).textContent = ratio.toFixed(2) + ':1';
@@ -1255,9 +1294,11 @@ function updateShades() {
 function updateShadeTextPreviews() {
   const lightBg = pickers.lightBg.color.hexString;
   const darkBg = pickers.darkBg.color.hexString;
-  const previewText = document.getElementById('previewText').value || 'Advea';
+  const previewText = document.getElementById('previewText').value || 'Brand';
   const fontFamily = fontSelect.value;
   const fontSize = document.getElementById('fontSize').value + 'px';
+  const fontWeight = document.getElementById('fontWeight').value;
+  const fontItalic = document.getElementById('fontItalic').checked;
 
   const combos = [
     { label: 'Primary on Light', colorKey: 'primary', baseStep: 500, bg: lightBg },
@@ -1277,7 +1318,7 @@ function updateShadeTextPreviews() {
       const dim = absLc < 15;
       return `<div class="shade-text-line${dim ? ' dim' : ''}">` +
         `<span class="shade-text-step">${s.step}</span>` +
-        `<span class="shade-text-preview" style="color:${s.hex};font-family:'${fontFamily}',serif;font-size:${fontSize}">${previewText}</span>` +
+        `<span class="shade-text-preview" style="color:${s.hex};font-family:'${fontFamily}',serif;font-size:${fontSize};font-weight:${fontWeight};font-style:${fontItalic ? 'italic' : 'normal'}">${previewText}</span>` +
         `<span class="shade-text-badge"><span class="badge ${label.cls}">${label.text}</span></span>` +
       `</div>`;
     }).join('');
@@ -1310,8 +1351,27 @@ shadeTextRatingsToggle.addEventListener('change', () => {
 // --- Settings events ---
 document.getElementById('previewText').addEventListener('input', updateAllPreviews);
 
+const fontWeightSelect = document.getElementById('fontWeight');
+const fontItalicToggle = document.getElementById('fontItalic');
+
+function reloadCurrentFont() {
+  loadFont(fontSelect.value, fontWeightSelect.value, fontItalicToggle.checked);
+}
+
 fontSelect.addEventListener('change', () => {
-  loadFont(fontSelect.value);
+  reloadCurrentFont();
+  updateAllPreviews();
+  debouncedPersist();
+});
+
+fontWeightSelect.addEventListener('change', () => {
+  reloadCurrentFont();
+  updateAllPreviews();
+  debouncedPersist();
+});
+
+fontItalicToggle.addEventListener('change', () => {
+  reloadCurrentFont();
   updateAllPreviews();
   debouncedPersist();
 });
@@ -1391,13 +1451,15 @@ function persistState() {
     lightBg: pickers.lightBg.color.hexString,
     previewText: document.getElementById('previewText').value,
     fontFamily: fontSelect.value,
+    fontWeight: fontWeightSelect.value,
+    fontItalic: fontItalicToggle.checked,
     fontSize: fontSizeSlider.value
   };
-  localStorage.setItem('brand-color-tool', JSON.stringify(state));
+  sessionStorage.setItem('brand-color-tool', JSON.stringify(state));
 }
 
 function restoreState() {
-  // URL hash takes priority over localStorage
+  // URL hash takes priority over sessionStorage
   const hashColors = parseHash();
   if (hashColors) {
     isRestoring = true;
@@ -1407,16 +1469,18 @@ function restoreState() {
     pickers.lightBg.color.hexString = hashColors.lightBg;
     isRestoring = false;
     syncAllHexInputs();
-    // Still restore non-color settings from localStorage
-    const saved = localStorage.getItem('brand-color-tool');
+    // Still restore non-color settings from sessionStorage
+    const saved = sessionStorage.getItem('brand-color-tool');
     if (saved) {
       try {
         const state = JSON.parse(saved);
         if (state.previewText) document.getElementById('previewText').value = state.previewText;
         if (state.fontFamily) {
           fontSelect.value = state.fontFamily;
-          loadFont(state.fontFamily);
         }
+        if (state.fontWeight) fontWeightSelect.value = state.fontWeight;
+        if (state.fontItalic != null) fontItalicToggle.checked = state.fontItalic;
+        reloadCurrentFont();
         if (state.fontSize) {
           fontSizeSlider.value = state.fontSize;
           fontSizeLabel.textContent = state.fontSize + 'px';
@@ -1426,7 +1490,7 @@ function restoreState() {
     return;
   }
 
-  const saved = localStorage.getItem('brand-color-tool');
+  const saved = sessionStorage.getItem('brand-color-tool');
   if (!saved) return;
   try {
     const state = JSON.parse(saved);
@@ -1439,8 +1503,10 @@ function restoreState() {
     if (state.previewText) document.getElementById('previewText').value = state.previewText;
     if (state.fontFamily) {
       fontSelect.value = state.fontFamily;
-      loadFont(state.fontFamily);
     }
+    if (state.fontWeight) fontWeightSelect.value = state.fontWeight;
+    if (state.fontItalic != null) fontItalicToggle.checked = state.fontItalic;
+    reloadCurrentFont();
     if (state.fontSize) {
       fontSizeSlider.value = state.fontSize;
       fontSizeLabel.textContent = state.fontSize + 'px';
