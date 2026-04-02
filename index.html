@@ -1381,9 +1381,11 @@ const shadesRatingsToggle = document.getElementById('shadesRatingsToggle');
 const shadesLabelsToggle = document.getElementById('shadesLabelsToggle');
 shadesRatingsToggle.addEventListener('change', () => {
   shadesGrid.classList.toggle('compact', !shadesRatingsToggle.checked);
+  debouncedPersist();
 });
 shadesLabelsToggle.addEventListener('change', () => {
   shadesGrid.classList.toggle('show-labels', shadesLabelsToggle.checked);
+  debouncedPersist();
 });
 shadesGrid.classList.add('compact'); // default: ratings hidden
 
@@ -1391,6 +1393,7 @@ const shadeTextGrid = document.getElementById('shadeTextGrid');
 const shadeTextRatingsToggle = document.getElementById('shadeTextRatingsToggle');
 shadeTextRatingsToggle.addEventListener('change', () => {
   shadeTextGrid.classList.toggle('hide-ratings', !shadeTextRatingsToggle.checked);
+  debouncedPersist();
 });
 
 // --- Settings events ---
@@ -1511,9 +1514,27 @@ function persistState() {
     fontFamily: fontSelect.value,
     fontWeight: fontWeightSelect.value,
     fontItalic: fontItalicToggle.checked,
-    fontSize: fontSizeSlider.value
+    fontSize: fontSizeSlider.value,
+    shadesRatings: shadesRatingsToggle.checked,
+    shadesLabels: shadesLabelsToggle.checked,
+    shadeTextRatings: shadeTextRatingsToggle.checked
   };
   sessionStorage.setItem('brand-color-tool', JSON.stringify(state));
+}
+
+function restoreToggles(state) {
+  if (state.shadesRatings != null) {
+    shadesRatingsToggle.checked = state.shadesRatings;
+    shadesGrid.classList.toggle('compact', !state.shadesRatings);
+  }
+  if (state.shadesLabels != null) {
+    shadesLabelsToggle.checked = state.shadesLabels;
+    shadesGrid.classList.toggle('show-labels', state.shadesLabels);
+  }
+  if (state.shadeTextRatings != null) {
+    shadeTextRatingsToggle.checked = state.shadeTextRatings;
+    shadeTextGrid.classList.toggle('hide-ratings', !state.shadeTextRatings);
+  }
 }
 
 function restoreState() {
@@ -1543,6 +1564,7 @@ function restoreState() {
           fontSizeSlider.value = state.fontSize;
           fontSizeLabel.textContent = state.fontSize + 'px';
         }
+        restoreToggles(state);
       } catch (e) { /* ignore */ }
     }
     return;
@@ -1569,6 +1591,7 @@ function restoreState() {
       fontSizeSlider.value = state.fontSize;
       fontSizeLabel.textContent = state.fontSize + 'px';
     }
+    restoreToggles(state);
     syncAllHexInputs();
   } catch (e) { /* ignore corrupt data */ }
 }
