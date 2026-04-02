@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Color Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* Settings bar */
+    .settings-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: #16213e;
+      border-radius: 12px;
+    }
+
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .setting-group label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #888;
+    }
+
+    .setting-group input[type="text"],
+    .setting-group select {
+      background: #0f3460;
+      border: 1px solid #333;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .setting-group input[type="range"] {
+      width: 120px;
+      accent-color: #5c7cfa;
+    }
+
+    .font-size-value {
+      font-size: 12px;
+      color: #aaa;
+      min-width: 40px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-undo {
+      background: #374151;
+      color: #e0e0e0;
+    }
+
+    .btn-export {
+      background: #10b981;
+      color: #fff;
+    }
+
+    .btn-undo:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    /* Pickers row */
+    .pickers-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) 1.2fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .picker-card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .picker-card h3 {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #aaa;
+    }
+
+    .hex-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .hex-input {
+      flex: 1;
+      background: #0f3460;
+      border: 1px solid #333;
+      color: #fff;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .btn-copy {
+      background: #374151;
+      color: #ccc;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 8px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+
+    .btn-copy:hover { background: #4b5563; }
+    .btn-copy.copied { background: #22c55e; color: #fff; }
+
+    .btn-pick {
+      background: #374151;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .btn-pick:hover { background: #4b5563; }
+
+    /* Color wheel viz */
+    .viz-card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .viz-card h3 {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #aaa;
+    }
+
+    .viz-legend {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .viz-legend span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .viz-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid #fff;
+    }
+
+    /* Contrast grid */
+    .contrast-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .contrast-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .contrast-panel {
+      border-radius: 12px 12px 0 0;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-bottom: none;
+      transition: border-color 0.3s;
+    }
+
+    .contrast-panel:hover {
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .panel-label {
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.6;
+      position: absolute;
+      top: 8px;
+      left: 12px;
+    }
+
+    .panel-preview {
+      line-height: 1.2;
+      transition: font-family 0.3s;
+    }
+
+    .panel-info {
+      background: #16213e;
+      border-radius: 0 0 12px 12px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-top: none;
+    }
+
+    .panel-ratio {
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+
+    .panel-badges {
+      display: flex;
+      gap: 6px;
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+    }
+
+    .badge {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .badge-pass { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .badge-warn { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+    .badge-fail { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+    .apca-score {
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .apca-lc {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .apca-label {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    /* Tints & Shades */
+    .shades-section {
+      margin-top: 24px;
+    }
+
+    .shades-section h2 {
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+
+    .shades-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .shades-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .shades-column-header {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #aaa;
+      padding: 8px 10px;
+      background: #16213e;
+      border-radius: 12px 12px 0 0;
+      display: grid;
+      grid-template-columns: 72px 1fr 1fr 1fr;
+      align-items: center;
+      gap: 0 8px;
+    }
+
+    .shades-column-header .shade-sub {
+      font-size: 11px;
+      color: #999;
+      text-align: left;
+    }
+
+    .shade-row {
+      display: grid;
+      grid-template-columns: 72px 1fr 1fr 1fr;
+      align-items: center;
+      gap: 0 8px;
+      height: 48px;
+      border-left: 1px solid rgba(255,255,255,0.05);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      background: #16213e;
+      padding-right: 10px;
+    }
+
+    .shade-row:last-child {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+    }
+
+    .shade-swatch {
+      width: 100%;
+      height: 100%;
+    }
+
+    .shade-row:last-child .shade-swatch {
+      border-radius: 0 0 0 12px;
+    }
+
+    .shade-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .shade-step {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .shade-hex {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    .shade-hex:hover {
+      color: #fff;
+    }
+
+    .shade-contrast-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .shade-contrast-group .badge {
+      padding: 2px 7px;
+      font-size: 12px;
+    }
+
+    .shade-base-marker {
+      background: rgba(255,255,255,0.06) !important;
+      height: 88px;
+    }
+
+    .shade-base-marker .shade-step {
+      color: #aaa;
+      font-weight: 700;
+    }
+
+    /* Shades compact mode (no ratings) */
+    .shades-grid.compact .shade-row {
+      grid-template-columns: 1fr;
+      padding-right: 0;
+    }
+
+    .shades-grid.compact .shade-meta,
+    .shades-grid.compact .shade-contrast-group {
+      display: none;
+    }
+
+    .shades-grid.compact .shade-row:last-child .shade-swatch {
+      border-radius: 0 0 12px 12px;
+    }
+
+    .shades-grid.compact .shades-column-header {
+      grid-template-columns: 1fr;
+    }
+
+    .shades-grid.compact .shade-sub {
+      display: none;
+    }
+
+    /* Toggle switch */
+    .shades-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .shades-header h2 {
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #aaa;
+      margin: 0;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      background: #374151;
+      border-radius: 10px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: #aaa;
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .toggle-input {
+      display: none;
+    }
+
+    .toggle-input:checked + .toggle-label .toggle-switch {
+      background: #5c7cfa;
+    }
+
+    .toggle-input:checked + .toggle-label .toggle-switch::after {
+      transform: translateX(16px);
+      background: #fff;
+    }
+
+    /* Swatch label */
+    .shade-swatch {
+      position: relative;
+    }
+
+    .swatch-label {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+    }
+
+    .shade-base-marker .swatch-label {
+      font-size: 22px;
+    }
+
+    .shades-grid.show-labels .swatch-label {
+      display: flex;
+    }
+
+    .swatch-label-dual {
+      flex-direction: column;
+      padding: 0;
+      gap: 0;
+    }
+
+    .swatch-label-dual > span {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Shade Text Preview */
+    .shade-text-section {
+      margin-top: 24px;
+    }
+
+
+    .shade-text-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .shade-text-panel {
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .shade-text-panel-header {
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.5;
+      margin-bottom: 12px;
+    }
+
+    .shade-text-line {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 4px 0;
+    }
+
+    .shade-text-line.dim {
+      opacity: 0.25;
+    }
+
+    .shade-text-step {
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      width: 28px;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .shade-text-preview {
+      flex: 1;
+      line-height: 1.3;
+    }
+
+    .shade-text-badge {
+      flex-shrink: 0;
+    }
+
+    .shade-text-grid.hide-ratings .shade-text-badge {
+      display: none;
+    }
+
+    .shade-text-grid.hide-ratings .shade-text-step {
+      display: none;
+    }
+
+    @media (max-width: 1200px) {
+      .shade-text-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .shade-text-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #16213e;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .pickers-row { grid-template-columns: repeat(2, 1fr); }
+      .contrast-grid { grid-template-columns: repeat(2, 1fr); }
+      .shades-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .pickers-row { grid-template-columns: 1fr; }
+      .contrast-grid { grid-template-columns: 1fr; }
+      .shades-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Settings bar -->
+<div class="settings-bar">
+  <div class="setting-group">
+    <label>Preview text</label>
+    <input type="text" id="previewText" value="Advea" style="width:160px">
+  </div>
+  <div class="setting-group">
+    <label>Font</label>
+    <select id="fontSelect"></select>
+  </div>
+  <div class="setting-group">
+    <label>Font size</label>
+    <div style="display:flex;align-items:center;gap:8px">
+      <input type="range" id="fontSize" min="12" max="120" value="48">
+      <span class="font-size-value" id="fontSizeLabel">48px</span>
+    </div>
+  </div>
+  <div style="flex:1"></div>
+  <button class="btn btn-undo" id="undoBtn" disabled title="Ctrl+Z">↩ Undo</button>
+  <button class="btn btn-export" id="exportCoolorsBtn" title="Open palette in Coolors.co">🎨 Coolors.co</button>
+</div>
+
+<!-- Pickers + Viz -->
+<div class="pickers-row">
+  <div class="picker-card">
+    <h3>Primary</h3>
+    <div id="pickerPrimary"></div>
+    <div class="hex-row">
+      <input class="hex-input" id="hexPrimary" value="#e8192c" spellcheck="false">
+      <button class="btn-copy" data-target="hexPrimary">Copy</button><button class="btn-pick" data-picker="primary" hidden>💧</button>
+    </div>
+  </div>
+  <div class="picker-card">
+    <h3>Secondary</h3>
+    <div id="pickerSecondary"></div>
+    <div class="hex-row">
+      <input class="hex-input" id="hexSecondary" value="#00c8d5" spellcheck="false">
+      <button class="btn-copy" data-target="hexSecondary">Copy</button><button class="btn-pick" data-picker="secondary" hidden>💧</button>
+    </div>
+  </div>
+  <div class="picker-card">
+    <h3>Dark Background</h3>
+    <div id="pickerDarkBg"></div>
+    <div class="hex-row">
+      <input class="hex-input" id="hexDarkBg" value="#000000" spellcheck="false">
+      <button class="btn-copy" data-target="hexDarkBg">Copy</button><button class="btn-pick" data-picker="darkBg" hidden>💧</button>
+    </div>
+  </div>
+  <div class="picker-card">
+    <h3>Light Background</h3>
+    <div id="pickerLightBg"></div>
+    <div class="hex-row">
+      <input class="hex-input" id="hexLightBg" value="#ffffff" spellcheck="false">
+      <button class="btn-copy" data-target="hexLightBg">Copy</button><button class="btn-pick" data-picker="lightBg" hidden>💧</button>
+    </div>
+  </div>
+  <div class="viz-card">
+    <h3>Color Wheel</h3>
+    <div id="vizWheel"></div>
+    <div class="viz-legend">
+      <span><span class="viz-dot" id="vizDotPrimary"></span> Primary</span>
+      <span><span class="viz-dot" id="vizDotSecondary"></span> Secondary</span>
+    </div>
+  </div>
+</div>
+
+<!-- Contrast Grid -->
+<div class="contrast-grid">
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-primary-light">
+      <span class="panel-label">Primary on Light</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-primary-light"></span><span class="panel-badges" data-panel="panel-primary-light"></span><span class="apca-score" data-panel="panel-primary-light"></span></div>
+  </div>
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-primary-dark">
+      <span class="panel-label">Primary on Dark</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-primary-dark"></span><span class="panel-badges" data-panel="panel-primary-dark"></span><span class="apca-score" data-panel="panel-primary-dark"></span></div>
+  </div>
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-primary-secondary">
+      <span class="panel-label">Primary on Secondary</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-primary-secondary"></span><span class="panel-badges" data-panel="panel-primary-secondary"></span><span class="apca-score" data-panel="panel-primary-secondary"></span></div>
+  </div>
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-dark-light">
+      <span class="panel-label">Dark on Light</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-dark-light"></span><span class="panel-badges" data-panel="panel-dark-light"></span><span class="apca-score" data-panel="panel-dark-light"></span></div>
+  </div>
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-secondary-light">
+      <span class="panel-label">Secondary on Light</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-secondary-light"></span><span class="panel-badges" data-panel="panel-secondary-light"></span><span class="apca-score" data-panel="panel-secondary-light"></span></div>
+  </div>
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-secondary-dark">
+      <span class="panel-label">Secondary on Dark</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-secondary-dark"></span><span class="panel-badges" data-panel="panel-secondary-dark"></span><span class="apca-score" data-panel="panel-secondary-dark"></span></div>
+  </div>
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-secondary-primary">
+      <span class="panel-label">Secondary on Primary</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-secondary-primary"></span><span class="panel-badges" data-panel="panel-secondary-primary"></span><span class="apca-score" data-panel="panel-secondary-primary"></span></div>
+  </div>
+  <div class="contrast-item">
+    <div class="contrast-panel" id="panel-light-dark">
+      <span class="panel-label">Light on Dark</span>
+      <span class="panel-preview"></span>
+    </div>
+    <div class="panel-info"><span class="panel-ratio" data-panel="panel-light-dark"></span><span class="panel-badges" data-panel="panel-light-dark"></span><span class="apca-score" data-panel="panel-light-dark"></span></div>
+  </div>
+</div>
+
+<!-- Tints & Shades -->
+<div class="shades-section">
+  <div class="shades-header">
+    <h2>Tints &amp; Shades</h2>
+    <input type="checkbox" id="shadesLabelsToggle" class="toggle-input">
+    <label for="shadesLabelsToggle" class="toggle-label">
+      <span class="toggle-switch"></span>
+      Labels
+    </label>
+    <input type="checkbox" id="shadesRatingsToggle" class="toggle-input">
+    <label for="shadesRatingsToggle" class="toggle-label">
+      <span class="toggle-switch"></span>
+      Contrast ratings
+    </label>
+  </div>
+  <div class="shades-grid" id="shadesGrid"></div>
+</div>
+
+<!-- Shade Text Preview -->
+<div class="shade-text-section">
+  <div class="shades-header">
+    <h2>Shade Text Preview</h2>
+    <input type="checkbox" id="shadeTextRatingsToggle" class="toggle-input">
+    <label for="shadeTextRatingsToggle" class="toggle-label">
+      <span class="toggle-switch"></span>
+      Contrast ratings
+    </label>
+  </div>
+  <div class="shade-text-grid hide-ratings" id="shadeTextGrid"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// --- Google Fonts ---
+const FONTS = [
+  'Taviraj', 'Inter', 'Roboto', 'Open Sans', 'Montserrat', 'Playfair Display',
+  'Lora', 'Merriweather', 'Poppins', 'Raleway', 'Oswald', 'Source Sans 3',
+  'Nunito', 'PT Sans', 'Work Sans', 'Fira Sans', 'DM Sans', 'Outfit',
+  'Space Grotesk', 'IBM Plex Sans', 'Bitter', 'Crimson Text', 'Libre Baskerville',
+  'EB Garamond', 'Cormorant Garamond', 'Josefin Sans', 'Quicksand', 'Comfortaa',
+  'Archivo', 'Barlow', 'Rubik', 'Karla', 'Manrope', 'Plus Jakarta Sans',
+  'Lexend', 'Sora', 'Atkinson Hyperlegible', 'JetBrains Mono', 'Fira Code',
+  'Source Code Pro', 'Space Mono'
+];
+
+const fontSelect = document.getElementById('fontSelect');
+FONTS.forEach(f => {
+  const opt = document.createElement('option');
+  opt.value = f;
+  opt.textContent = f;
+  fontSelect.appendChild(opt);
+});
+
+function loadFont(family) {
+  const id = 'gfont-' + family.replace(/\s+/g, '-');
+  if (document.getElementById(id)) return;
+  const link = document.createElement('link');
+  link.id = id;
+  link.rel = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}:wght@400;700&display=swap`;
+  document.head.appendChild(link);
+}
+
+// --- Color utilities ---
+function hexToRgb(hex) {
+  hex = hex.replace('#', '');
+  return {
+    r: parseInt(hex.slice(0, 2), 16),
+    g: parseInt(hex.slice(2, 4), 16),
+    b: parseInt(hex.slice(4, 6), 16)
+  };
+}
+
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(c => Math.round(Math.max(0, Math.min(255, c))).toString(16).padStart(2, '0')).join('');
+}
+
+function relativeLuminance(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const linearize = c => {
+    c /= 255;
+    return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
+}
+
+function contrastRatio(hex1, hex2) {
+  const L1 = relativeLuminance(hex1);
+  const L2 = relativeLuminance(hex2);
+  const lighter = Math.max(L1, L2);
+  const darker = Math.min(L1, L2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+// --- APCA-W3 contrast ---
+function apcaContrast(textHex, bgHex) {
+  const linearize = c => {
+    c /= 255;
+    return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  };
+  const toY = hex => {
+    const { r, g, b } = hexToRgb(hex);
+    return 0.2126729 * linearize(r) + 0.7151522 * linearize(g) + 0.0721750 * linearize(b);
+  };
+  const softClamp = Y => Y < 0.022 ? Y + Math.pow(0.022 - Y, 1.414) : Y;
+
+  let Ytxt = softClamp(toY(textHex));
+  let Ybg = softClamp(toY(bgHex));
+
+  if (Math.abs(Ytxt - Ybg) < 0.0005) return 0;
+
+  let Sapc;
+  if (Ybg > Ytxt) {
+    // Normal polarity: dark text on light bg
+    Sapc = (Math.pow(Ybg, 0.56) - Math.pow(Ytxt, 0.57)) * 1.14;
+    if (Sapc < 0.1) return 0;
+    return (Sapc - 0.027) * 100;
+  } else {
+    // Reverse polarity: light text on dark bg
+    Sapc = (Math.pow(Ybg, 0.65) - Math.pow(Ytxt, 0.62)) * 1.14;
+    if (Sapc > -0.1) return 0;
+    return (Sapc + 0.027) * 100;
+  }
+}
+
+function apcaLabel(lc) {
+  const abs = Math.abs(lc);
+  if (abs >= 90) return { text: '14px', cls: 'badge-pass' };
+  if (abs >= 75) return { text: '16px', cls: 'badge-pass' };
+  if (abs >= 60) return { text: '18px', cls: 'badge-pass' };
+  if (abs >= 45) return { text: '24px', cls: 'badge-warn' };
+  if (abs >= 30) return { text: '36px', cls: 'badge-warn' };
+  if (abs >= 15) return { text: '48px', cls: 'badge-fail' };
+  return { text: '—', cls: 'badge-fail' };
+}
+
+// --- Undo system ---
+const undoStack = [];
+const MAX_UNDO = 50;
+let isRestoring = false;
+
+function saveState() {
+  if (isRestoring) return;
+  undoStack.push({
+    primary: pickers.primary.color.hexString,
+    secondary: pickers.secondary.color.hexString,
+    darkBg: pickers.darkBg.color.hexString,
+    lightBg: pickers.lightBg.color.hexString
+  });
+  if (undoStack.length > MAX_UNDO) undoStack.shift();
+  document.getElementById('undoBtn').disabled = undoStack.length < 2;
+}
+
+function undo() {
+  if (undoStack.length < 2) return;
+  undoStack.pop();
+  const prev = undoStack[undoStack.length - 1];
+  isRestoring = true;
+  pickers.primary.color.hexString = prev.primary;
+  pickers.secondary.color.hexString = prev.secondary;
+  pickers.darkBg.color.hexString = prev.darkBg;
+  pickers.lightBg.color.hexString = prev.lightBg;
+  isRestoring = false;
+  syncAllHexInputs();
+  updateAllPreviews();
+  persistState();
+  updateHash();
+  document.getElementById('undoBtn').disabled = undoStack.length < 2;
+}
+
+// --- Pickers ---
+const pickerConfig = (el, color) => ({
+  el,
+  width: 160,
+  color,
+  layout: [
+    { component: iro.ui.Wheel },
+    { component: iro.ui.Slider, options: { sliderType: 'hue' } },
+    { component: iro.ui.Slider, options: { sliderType: 'saturation' } },
+    { component: iro.ui.Slider, options: { sliderType: 'value' } }
+  ]
+});
+
+const pickers = {
+  primary: new iro.ColorPicker('#pickerPrimary', pickerConfig('#pickerPrimary', '#e8192c')),
+  secondary: new iro.ColorPicker('#pickerSecondary', pickerConfig('#pickerSecondary', '#00c8d5')),
+  darkBg: new iro.ColorPicker('#pickerDarkBg', pickerConfig('#pickerDarkBg', '#000000')),
+  lightBg: new iro.ColorPicker('#pickerLightBg', pickerConfig('#pickerLightBg', '#ffffff'))
+};
+
+// Viz wheel
+const vizWheel = new iro.ColorPicker('#vizWheel', {
+  width: 180,
+  colors: ['#e8192c', '#00c8d5'],
+  layout: [{ component: iro.ui.Wheel }]
+});
+document.querySelector('#vizWheel').style.pointerEvents = 'none';
+
+// Wire picker events
+const pickerHexMap = {
+  primary: 'hexPrimary',
+  secondary: 'hexSecondary',
+  darkBg: 'hexDarkBg',
+  lightBg: 'hexLightBg'
+};
+
+function syncAllHexInputs() {
+  for (const [key, inputId] of Object.entries(pickerHexMap)) {
+    document.getElementById(inputId).value = pickers[key].color.hexString;
+  }
+}
+
+function updateVizWheel() {
+  vizWheel.colors[0].hexString = pickers.primary.color.hexString;
+  vizWheel.colors[1].hexString = pickers.secondary.color.hexString;
+  document.getElementById('vizDotPrimary').style.background = pickers.primary.color.hexString;
+  document.getElementById('vizDotSecondary').style.background = pickers.secondary.color.hexString;
+}
+
+for (const [key, inputId] of Object.entries(pickerHexMap)) {
+  pickers[key].on('color:change', () => {
+    document.getElementById(inputId).value = pickers[key].color.hexString;
+    updateAllPreviews();
+    updateVizWheel();
+    debouncedPersist();
+    debouncedHash();
+  });
+  pickers[key].on('input:end', () => {
+    saveState();
+  });
+}
+
+// Hex input editing
+for (const [key, inputId] of Object.entries(pickerHexMap)) {
+  const input = document.getElementById(inputId);
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    if (/^#[0-9a-f]{6}$/i.test(val)) {
+      isRestoring = true;
+      pickers[key].color.hexString = val;
+      isRestoring = false;
+      updateAllPreviews();
+      updateVizWheel();
+      saveState();
+      debouncedPersist();
+      debouncedHash();
+    }
+  });
+}
+
+// Copy buttons
+document.querySelectorAll('.btn-copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const hex = document.getElementById(btn.dataset.target).value;
+    navigator.clipboard.writeText(hex).then(() => {
+      btn.classList.add('copied');
+      btn.textContent = '✓';
+      setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1000);
+    });
+  });
+});
+
+// --- Contrast panels ---
+const panelConfigs = [
+  { id: 'panel-primary-light', text: 'primary', bg: 'lightBg' },
+  { id: 'panel-primary-dark', text: 'primary', bg: 'darkBg' },
+  { id: 'panel-primary-secondary', text: 'primary', bg: 'secondary' },
+  { id: 'panel-dark-light', text: 'darkBg', bg: 'lightBg' },
+  { id: 'panel-secondary-light', text: 'secondary', bg: 'lightBg' },
+  { id: 'panel-secondary-dark', text: 'secondary', bg: 'darkBg' },
+  { id: 'panel-secondary-primary', text: 'secondary', bg: 'primary' },
+  { id: 'panel-light-dark', text: 'lightBg', bg: 'darkBg' },
+];
+
+function updateAllPreviews() {
+  const previewText = document.getElementById('previewText').value || 'Advea';
+  const fontFamily = fontSelect.value;
+  const fontSize = document.getElementById('fontSize').value + 'px';
+
+  panelConfigs.forEach(cfg => {
+    const panel = document.getElementById(cfg.id);
+    const textColor = pickers[cfg.text].color.hexString;
+    const bgColor = pickers[cfg.bg].color.hexString;
+
+    panel.style.backgroundColor = bgColor;
+    panel.style.color = textColor;
+
+    const preview = panel.querySelector('.panel-preview');
+    preview.textContent = previewText;
+    preview.style.fontFamily = `'${fontFamily}', serif`;
+    preview.style.fontSize = fontSize;
+
+    const ratio = contrastRatio(textColor, bgColor);
+    document.querySelector(`.panel-ratio[data-panel="${cfg.id}"]`).textContent = ratio.toFixed(2) + ':1';
+
+    const badges = document.querySelector(`.panel-badges[data-panel="${cfg.id}"]`);
+    const passAALg = ratio >= 3;
+    const passAA = ratio >= 4.5;
+    const passAAA = ratio >= 7;
+    badges.innerHTML =
+      `<span class="badge ${passAALg ? 'badge-pass' : 'badge-fail'}">AA Lg ${passAALg ? '✓' : '✗'}</span>` +
+      `<span class="badge ${passAA ? 'badge-pass' : 'badge-fail'}">AA ${passAA ? '✓' : '✗'}</span>` +
+      `<span class="badge ${passAAA ? 'badge-pass' : 'badge-fail'}">AAA ${passAAA ? '✓' : '✗'}</span>`;
+
+    const lc = apcaContrast(textColor, bgColor);
+    const label = apcaLabel(lc);
+    const apcaEl = document.querySelector(`.apca-score[data-panel="${cfg.id}"]`);
+    apcaEl.innerHTML =
+      `<span class="badge ${label.cls} apca-label">APCA ${label.text}</span>`;
+  });
+
+  updateShades();
+  updateShadeTextPreviews();
+}
+
+// --- Tints & Shades ---
+const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+
+function mixColor(hex, mixHex, amount) {
+  const c = hexToRgb(hex);
+  const m = hexToRgb(mixHex);
+  return rgbToHex(
+    c.r + (m.r - c.r) * amount,
+    c.g + (m.g - c.g) * amount,
+    c.b + (m.b - c.b) * amount
+  );
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+  }
+  return { h, s, l };
+}
+
+function hslToRgb(h, s, l) {
+  if (s === 0) return { r: l * 255, g: l * 255, b: l * 255 };
+  const hue2rgb = (p, q, t) => {
+    if (t < 0) t += 1; if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  };
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  return {
+    r: hue2rgb(p, q, h + 1/3) * 255,
+    g: hue2rgb(p, q, h) * 255,
+    b: hue2rgb(p, q, h - 1/3) * 255
+  };
+}
+
+function generateShades(baseHex, baseStep = 500, tintTarget = null, shadeTarget = null) {
+  const rgb = hexToRgb(baseHex);
+  const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+  const baseChroma = hsl.s * (1 - Math.abs(2 * hsl.l - 1));
+
+  return STEPS.map(step => {
+    if (step === baseStep) return { step, hex: baseHex, isBase: true };
+
+    if (tintTarget || shadeTarget) {
+      if (step < baseStep) {
+        const t = (baseStep - step) / baseStep;
+        return { step, hex: mixColor(baseHex, tintTarget || '#ffffff', t) };
+      }
+      const t = (step - baseStep) / (900 - baseStep);
+      return { step, hex: mixColor(baseHex, shadeTarget || '#000000', t) };
+    }
+
+    if (step < baseStep) {
+      // Primary/Secondary tints: toward white
+      const t = (baseStep - step) / baseStep;
+      return { step, hex: mixColor(baseHex, '#ffffff', t) };
+    }
+
+    // Primary/Secondary: HSL shading with chroma preservation
+    const t = (step - baseStep) / (900 - baseStep);
+    const targetL = hsl.l * (1 - t);
+    const maxChroma = 1 - Math.abs(2 * targetL - 1);
+    const targetS = maxChroma > 0 ? Math.min(baseChroma / maxChroma, 1) : 0;
+    const c = hslToRgb(hsl.h, targetS, targetL);
+    return { step, hex: rgbToHex(c.r, c.g, c.b) };
+  });
+}
+
+function shadeBadgesHTML(shadeHex, bgHex) {
+  const ratio = contrastRatio(shadeHex, bgHex);
+  const passAALg = ratio >= 3;
+  const passAA = ratio >= 4.5;
+  const lc = apcaContrast(shadeHex, bgHex);
+  const label = apcaLabel(lc);
+  return `<span class="shade-contrast-group">` +
+    `<span class="badge ${passAALg ? 'badge-pass' : 'badge-fail'}">Lg</span>` +
+    `<span class="badge ${passAA ? 'badge-pass' : 'badge-fail'}">AA</span>` +
+    `<span class="badge ${label.cls}">${label.text}</span>` +
+    `</span>`;
+}
+
+function updateShades() {
+  const lightBg = pickers.lightBg.color.hexString;
+  const darkBg = pickers.darkBg.color.hexString;
+  const columns = [
+    { label: 'Primary', key: 'primary', baseStep: 500 },
+    { label: 'Secondary', key: 'secondary', baseStep: 500 },
+    { label: 'Dark', key: 'darkBg', baseStep: 800, tintTo: 'lightBg', shadeTo: null },
+    { label: 'Light', key: 'lightBg', baseStep: 200, tintTo: null, shadeTo: 'darkBg' },
+  ];
+
+  const grid = document.getElementById('shadesGrid');
+  grid.innerHTML = columns.map(col => {
+    const baseHex = pickers[col.key].color.hexString;
+    const tintHex = col.tintTo ? pickers[col.tintTo].color.hexString : null;
+    const shadeHex = col.shadeTo ? pickers[col.shadeTo].color.hexString : null;
+    const shades = generateShades(baseHex, col.baseStep, tintHex, shadeHex);
+    const rows = shades.map(s => {
+      const isBase = s.isBase;
+      const lcLight = Math.abs(apcaContrast(lightBg, s.hex));
+      const lcDark = Math.abs(apcaContrast(darkBg, s.hex));
+      const best = lcLight > lcDark ? lightBg : darkBg;
+      const worst = lcLight > lcDark ? darkBg : lightBg;
+      const diff = Math.abs(lcLight - lcDark);
+      const showBoth = diff < 15 && Math.min(lcLight, lcDark) > 20;
+      let swatchInner;
+      if (showBoth) {
+        swatchInner = `<span class="swatch-label swatch-label-dual">` +
+          `<span style="color:${lightBg}">${s.step}</span>` +
+          `<span style="color:${darkBg}">${s.step}</span>` +
+        `</span>`;
+      } else {
+        swatchInner = `<span class="swatch-label" style="color:${best}">${s.step}</span>`;
+      }
+      return `<div class="shade-row${isBase ? ' shade-base-marker' : ''}">` +
+        `<div class="shade-swatch" style="background:${s.hex}">${swatchInner}</div>` +
+        `<span class="shade-meta"><span class="shade-hex" data-hex="${s.hex}">${s.hex}</span></span>` +
+        shadeBadgesHTML(s.hex, lightBg) +
+        shadeBadgesHTML(s.hex, darkBg) +
+      `</div>`;
+    }).join('');
+
+    return `<div class="shades-column">` +
+      `<div class="shades-column-header">` +
+        `<span>${col.label}</span>` +
+        `<span></span>` +
+        `<span class="shade-sub">Light</span>` +
+        `<span class="shade-sub">Dark</span>` +
+      `</div>` +
+      rows +
+    `</div>`;
+  }).join('');
+
+  // Click-to-copy on hex values
+  grid.querySelectorAll('.shade-hex').forEach(el => {
+    el.addEventListener('click', () => {
+      navigator.clipboard.writeText(el.dataset.hex).then(() => {
+        const orig = el.textContent;
+        el.textContent = '✓ copied';
+        setTimeout(() => { el.textContent = orig; }, 800);
+      });
+    });
+  });
+}
+
+// --- Shade Text Preview ---
+function updateShadeTextPreviews() {
+  const lightBg = pickers.lightBg.color.hexString;
+  const darkBg = pickers.darkBg.color.hexString;
+  const previewText = document.getElementById('previewText').value || 'Advea';
+  const fontFamily = fontSelect.value;
+  const fontSize = document.getElementById('fontSize').value + 'px';
+
+  const combos = [
+    { label: 'Primary on Light', colorKey: 'primary', baseStep: 500, bg: lightBg },
+    { label: 'Primary on Dark', colorKey: 'primary', baseStep: 500, bg: darkBg },
+    { label: 'Secondary on Light', colorKey: 'secondary', baseStep: 500, bg: lightBg },
+    { label: 'Secondary on Dark', colorKey: 'secondary', baseStep: 500, bg: darkBg },
+  ];
+
+  const grid = document.getElementById('shadeTextGrid');
+  grid.innerHTML = combos.map(c => {
+    const baseHex = pickers[c.colorKey].color.hexString;
+    const shades = generateShades(baseHex, c.baseStep);
+    const lines = shades.map(s => {
+      const lc = apcaContrast(s.hex, c.bg);
+      const absLc = Math.abs(lc);
+      const label = apcaLabel(lc);
+      const dim = absLc < 15;
+      return `<div class="shade-text-line${dim ? ' dim' : ''}">` +
+        `<span class="shade-text-step">${s.step}</span>` +
+        `<span class="shade-text-preview" style="color:${s.hex};font-family:'${fontFamily}',serif;font-size:${fontSize}">${previewText}</span>` +
+        `<span class="shade-text-badge"><span class="badge ${label.cls}">${label.text}</span></span>` +
+      `</div>`;
+    }).join('');
+
+    return `<div class="shade-text-panel" style="background:${c.bg}">` +
+      `<div class="shade-text-panel-header" style="color:${c.bg === lightBg ? darkBg : lightBg}">${c.label}</div>` +
+      lines +
+    `</div>`;
+  }).join('');
+}
+
+// --- Shades toggles ---
+const shadesGrid = document.getElementById('shadesGrid');
+const shadesRatingsToggle = document.getElementById('shadesRatingsToggle');
+const shadesLabelsToggle = document.getElementById('shadesLabelsToggle');
+shadesRatingsToggle.addEventListener('change', () => {
+  shadesGrid.classList.toggle('compact', !shadesRatingsToggle.checked);
+});
+shadesLabelsToggle.addEventListener('change', () => {
+  shadesGrid.classList.toggle('show-labels', shadesLabelsToggle.checked);
+});
+shadesGrid.classList.add('compact'); // default: ratings hidden
+
+const shadeTextGrid = document.getElementById('shadeTextGrid');
+const shadeTextRatingsToggle = document.getElementById('shadeTextRatingsToggle');
+shadeTextRatingsToggle.addEventListener('change', () => {
+  shadeTextGrid.classList.toggle('hide-ratings', !shadeTextRatingsToggle.checked);
+});
+
+// --- Settings events ---
+document.getElementById('previewText').addEventListener('input', updateAllPreviews);
+
+fontSelect.addEventListener('change', () => {
+  loadFont(fontSelect.value);
+  updateAllPreviews();
+  debouncedPersist();
+});
+
+const fontSizeSlider = document.getElementById('fontSize');
+const fontSizeLabel = document.getElementById('fontSizeLabel');
+fontSizeSlider.addEventListener('input', () => {
+  fontSizeLabel.textContent = fontSizeSlider.value + 'px';
+  updateAllPreviews();
+  debouncedPersist();
+});
+
+// --- Undo button + keyboard ---
+document.getElementById('undoBtn').addEventListener('click', undo);
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
+    e.preventDefault();
+    undo();
+  }
+});
+
+// Export to Coolors.co
+document.getElementById('exportCoolorsBtn').addEventListener('click', () => {
+  const strip = hex => hex.replace('#', '');
+  const url = `https://coolors.co/${strip(pickers.primary.color.hexString)}-${strip(pickers.secondary.color.hexString)}-${strip(pickers.darkBg.color.hexString)}-${strip(pickers.lightBg.color.hexString)}`;
+  window.open(url, '_blank');
+});
+
+// --- Toast ---
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// --- URL hash support ---
+let hashTimer;
+function debouncedHash() {
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(updateHash, 300);
+}
+
+function updateHash() {
+  const strip = hex => hex.replace('#', '').toLowerCase();
+  const hash = `${strip(pickers.primary.color.hexString)}-${strip(pickers.secondary.color.hexString)}-${strip(pickers.darkBg.color.hexString)}-${strip(pickers.lightBg.color.hexString)}`;
+  history.replaceState(null, '', '#' + hash);
+}
+
+function parseHash() {
+  const hash = location.hash.replace('#', '');
+  if (!hash) return null;
+  const parts = hash.split('-');
+  if (parts.length !== 4) return null;
+  const valid = parts.every(p => /^[0-9a-f]{6}$/i.test(p));
+  if (!valid) return null;
+  return {
+    primary: '#' + parts[0],
+    secondary: '#' + parts[1],
+    darkBg: '#' + parts[2],
+    lightBg: '#' + parts[3]
+  };
+}
+
+// --- LocalStorage ---
+let persistTimer;
+function debouncedPersist() {
+  clearTimeout(persistTimer);
+  persistTimer = setTimeout(persistState, 500);
+}
+
+function persistState() {
+  const state = {
+    primary: pickers.primary.color.hexString,
+    secondary: pickers.secondary.color.hexString,
+    darkBg: pickers.darkBg.color.hexString,
+    lightBg: pickers.lightBg.color.hexString,
+    previewText: document.getElementById('previewText').value,
+    fontFamily: fontSelect.value,
+    fontSize: fontSizeSlider.value
+  };
+  localStorage.setItem('brand-color-tool', JSON.stringify(state));
+}
+
+function restoreState() {
+  // URL hash takes priority over localStorage
+  const hashColors = parseHash();
+  if (hashColors) {
+    isRestoring = true;
+    pickers.primary.color.hexString = hashColors.primary;
+    pickers.secondary.color.hexString = hashColors.secondary;
+    pickers.darkBg.color.hexString = hashColors.darkBg;
+    pickers.lightBg.color.hexString = hashColors.lightBg;
+    isRestoring = false;
+    syncAllHexInputs();
+    // Still restore non-color settings from localStorage
+    const saved = localStorage.getItem('brand-color-tool');
+    if (saved) {
+      try {
+        const state = JSON.parse(saved);
+        if (state.previewText) document.getElementById('previewText').value = state.previewText;
+        if (state.fontFamily) {
+          fontSelect.value = state.fontFamily;
+          loadFont(state.fontFamily);
+        }
+        if (state.fontSize) {
+          fontSizeSlider.value = state.fontSize;
+          fontSizeLabel.textContent = state.fontSize + 'px';
+        }
+      } catch (e) { /* ignore */ }
+    }
+    return;
+  }
+
+  const saved = localStorage.getItem('brand-color-tool');
+  if (!saved) return;
+  try {
+    const state = JSON.parse(saved);
+    isRestoring = true;
+    if (state.primary) pickers.primary.color.hexString = state.primary;
+    if (state.secondary) pickers.secondary.color.hexString = state.secondary;
+    if (state.darkBg) pickers.darkBg.color.hexString = state.darkBg;
+    if (state.lightBg) pickers.lightBg.color.hexString = state.lightBg;
+    isRestoring = false;
+    if (state.previewText) document.getElementById('previewText').value = state.previewText;
+    if (state.fontFamily) {
+      fontSelect.value = state.fontFamily;
+      loadFont(state.fontFamily);
+    }
+    if (state.fontSize) {
+      fontSizeSlider.value = state.fontSize;
+      fontSizeLabel.textContent = state.fontSize + 'px';
+    }
+    syncAllHexInputs();
+  } catch (e) { /* ignore corrupt data */ }
+}
+
+// --- Hash change listener ---
+window.addEventListener('hashchange', () => {
+  const hashColors = parseHash();
+  if (!hashColors) return;
+  isRestoring = true;
+  pickers.primary.color.hexString = hashColors.primary;
+  pickers.secondary.color.hexString = hashColors.secondary;
+  pickers.darkBg.color.hexString = hashColors.darkBg;
+  pickers.lightBg.color.hexString = hashColors.lightBg;
+  isRestoring = false;
+  syncAllHexInputs();
+  updateAllPreviews();
+  updateVizWheel();
+  saveState();
+  persistState();
+});
+
+// --- EyeDropper ---
+if ('EyeDropper' in window) {
+  document.querySelectorAll('.btn-pick').forEach(btn => {
+    btn.hidden = false;
+    btn.addEventListener('click', async () => {
+      const pickerKey = btn.dataset.picker;
+      try {
+        const result = await new EyeDropper().open();
+        pickers[pickerKey].color.hexString = result.sRGBHex;
+        syncAllHexInputs();
+        updateAllPreviews();
+        updateVizWheel();
+        saveState();
+        debouncedPersist();
+        debouncedHash();
+      } catch (e) { /* user cancelled */ }
+    });
+  });
+}
+
+// --- Init ---
+restoreState();
+updateAllPreviews();
+updateVizWheel();
+updateHash();
+saveState(); // initial state for undo
+</script>
+</body>
+</html>
