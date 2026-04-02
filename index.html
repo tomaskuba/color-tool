@@ -132,6 +132,11 @@
       color: #fff;
     }
 
+    .btn-share {
+      background: var(--bg-btn);
+      color: var(--text-primary);
+    }
+
     .btn-undo:disabled {
       opacity: 0.4;
       cursor: default;
@@ -747,6 +752,7 @@
   <div style="flex:1"></div>
   <button class="btn btn-undo" id="undoBtn" disabled title="Ctrl+Z">↩ Undo</button>
   <button class="btn btn-export" id="exportCoolorsBtn" title="Open palette in Coolors.co">Coolors.co <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+  <button class="btn btn-share" id="shareBtn" title="Copy link with full configuration">⎘ Share</button>
   <button class="btn btn-theme" id="themeToggle" title="Switch theme">☀ Light</button>
 </div>
 
@@ -1461,6 +1467,28 @@ themeToggle.addEventListener('click', () => {
 });
 applyTheme(sessionStorage.getItem('brand-color-tool-theme') || 'dark');
 
+// Share button
+function buildFullState() {
+  return {
+    previewText: document.getElementById('previewText').value,
+    fontFamily: fontSelect.value,
+    fontWeight: fontWeightSelect.value,
+    fontItalic: fontItalicToggle.checked,
+    fontSize: fontSizeSlider.value,
+    shadesRatings: shadesRatingsToggle.checked,
+    shadesLabels: shadesLabelsToggle.checked,
+    shadeTextRatings: shadeTextRatingsToggle.checked,
+    theme: document.documentElement.getAttribute('data-theme') || 'dark'
+  };
+}
+document.getElementById('shareBtn').addEventListener('click', () => {
+  const strip = hex => hex.replace('#', '').toLowerCase();
+  const colors = `${strip(pickers.primary.color.hexString)}-${strip(pickers.secondary.color.hexString)}-${strip(pickers.darkBg.color.hexString)}-${strip(pickers.lightBg.color.hexString)}`;
+  const config = btoa(JSON.stringify(buildFullState()));
+  const url = `${location.origin}${location.pathname}#${colors}!${config}`;
+  navigator.clipboard.writeText(url).then(() => showToast('Link copied!'));
+});
+
 // --- Toast ---
 function showToast(msg) {
   const toast = document.getElementById('toast');
@@ -1485,16 +1513,21 @@ function updateHash() {
 function parseHash() {
   const hash = location.hash.replace('#', '');
   if (!hash) return null;
-  const parts = hash.split('-');
+  const [colorPart, configPart] = hash.split('!');
+  const parts = colorPart.split('-');
   if (parts.length !== 4) return null;
   const valid = parts.every(p => /^[0-9a-f]{6}$/i.test(p));
   if (!valid) return null;
-  return {
+  const result = {
     primary: '#' + parts[0],
     secondary: '#' + parts[1],
     darkBg: '#' + parts[2],
     lightBg: '#' + parts[3]
   };
+  if (configPart) {
+    try { result.config = JSON.parse(atob(configPart)); } catch (e) { /* ignore */ }
+  }
+  return result;
 }
 
 // --- LocalStorage ---
@@ -1510,14 +1543,7 @@ function persistState() {
     secondary: pickers.secondary.color.hexString,
     darkBg: pickers.darkBg.color.hexString,
     lightBg: pickers.lightBg.color.hexString,
-    previewText: document.getElementById('previewText').value,
-    fontFamily: fontSelect.value,
-    fontWeight: fontWeightSelect.value,
-    fontItalic: fontItalicToggle.checked,
-    fontSize: fontSizeSlider.value,
-    shadesRatings: shadesRatingsToggle.checked,
-    shadesLabels: shadesLabelsToggle.checked,
-    shadeTextRatings: shadeTextRatingsToggle.checked
+    ...buildFullState()
   };
   sessionStorage.setItem('brand-color-tool', JSON.stringify(state));
 }
@@ -1548,25 +1574,25 @@ function restoreState() {
     pickers.lightBg.color.hexString = hashColors.lightBg;
     isRestoring = false;
     syncAllHexInputs();
-    // Still restore non-color settings from sessionStorage
-    const saved = sessionStorage.getItem('brand-color-tool');
-    if (saved) {
-      try {
-        const state = JSON.parse(saved);
-        if (state.previewText) document.getElementById('previewText').value = state.previewText;
-        if (state.fontFamily) {
-          fontSelect.value = state.fontFamily;
-        }
-        if (state.fontWeight) fontWeightSelect.value = state.fontWeight;
-        if (state.fontItalic != null) fontItalicToggle.checked = state.fontItalic;
-        reloadCurrentFont();
-        if (state.fontSize) {
-          fontSizeSlider.value = state.fontSize;
-          fontSizeLabel.textContent = state.fontSize + 'px';
-        }
-        restoreToggles(state);
-      } catch (e) { /* ignore */ }
+    // Full config from Share link takes priority
+    const source = hashColors.config || (() => {
+      try { return JSON.parse(sessionStorage.getItem('brand-color-tool')); } catch (e) { return null; }
+    })();
+    if (source) {
+      if (source.previewText) document.getElementById('previewText').value = source.previewText;
+      if (source.fontFamily) fontSelect.value = source.fontFamily;
+      if (source.fontWeight) fontWeightSelect.value = source.fontWeight;
+      if (source.fontItalic != null) fontItalicToggle.checked = source.fontItalic;
+      reloadCurrentFont();
+      if (source.fontSize) {
+        fontSizeSlider.value = source.fontSize;
+        fontSizeLabel.textContent = source.fontSize + 'px';
+      }
+      restoreToggles(source);
+      if (source.theme) applyTheme(source.theme);
     }
+    // Clean URL to simple color hash if it had config
+    if (hashColors.config) updateHash();
     return;
   }
 
