@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brand Color Tool</title>
+  <meta name="description" content="Visualize your brand colors on realistic mockups with live contrast checking and tint/shade generation.">
+  <meta property="og:title" content="Brand Color Tool">
+  <meta property="og:description" content="Visualize your brand colors on realistic mockups with live contrast checking and tint/shade generation.">
+  <meta property="og:image" content="https://tomaskuba.github.io/color-tool/og-image.png">
+  <meta property="og:url" content="https://tomaskuba.github.io/color-tool/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://tomaskuba.github.io/color-tool/og-image.png">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Ccircle cx='50' cy='50' r='45'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M50 50L50 5A45 45 0 0 1 72.5 11.03Z' fill='%23ff0040'/%3E%3Cpath d='M50 50L72.5 11.03A45 45 0 0 1 88.97 27.5Z' fill='%23ff0000'/%3E%3Cpath d='M50 50L88.97 27.5A45 45 0 0 1 95 50Z' fill='%23ff8000'/%3E%3Cpath d='M50 50L95 50A45 45 0 0 1 88.97 72.5Z' fill='%23ffff00'/%3E%3Cpath d='M50 50L88.97 72.5A45 45 0 0 1 72.5 88.97Z' fill='%2380ff00'/%3E%3Cpath d='M50 50L72.5 88.97A45 45 0 0 1 50 95Z' fill='%2300ff00'/%3E%3Cpath d='M50 50L50 95A45 45 0 0 1 27.5 88.97Z' fill='%2300ff80'/%3E%3Cpath d='M50 50L27.5 88.97A45 45 0 0 1 11.03 72.5Z' fill='%2300ffff'/%3E%3Cpath d='M50 50L11.03 72.5A45 45 0 0 1 5 50Z' fill='%230080ff'/%3E%3Cpath d='M50 50L5 50A45 45 0 0 1 11.03 27.5Z' fill='%230000ff'/%3E%3Cpath d='M50 50L11.03 27.5A45 45 0 0 1 27.5 11.03Z' fill='%238000ff'/%3E%3Cpath d='M50 50L27.5 11.03A45 45 0 0 1 50 5Z' fill='%23ff00ff'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -807,7 +815,7 @@
 <div class="settings-bar">
   <div class="setting-group">
     <label>Preview text</label>
-    <input type="text" id="previewText" value="Brand" style="width:160px">
+    <input type="text" id="previewText" value="Brand &amp; Co." style="width:160px">
   </div>
   <div class="setting-group">
     <label>Font</label>
@@ -819,10 +827,10 @@
       <option value="100">100 Thin</option>
       <option value="200">200 ExtraLight</option>
       <option value="300">300 Light</option>
-      <option value="400" selected>400 Regular</option>
+      <option value="400">400 Regular</option>
       <option value="500">500 Medium</option>
       <option value="600">600 SemiBold</option>
-      <option value="700">700 Bold</option>
+      <option value="700" selected>700 Bold</option>
       <option value="800">800 ExtraBold</option>
       <option value="900">900 Black</option>
     </select>
