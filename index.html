@@ -1768,7 +1768,7 @@ const MOCKUP_DEFS = [
   { id: 'tshirt', layers: [
     { role: 'Text', type: 'objectColor', key: 'lightBg', src: 'mockups/tshirt/text.png', blend: 'overlay' },
     { role: 'T-shirt', type: 'objectColor', key: 'primary', src: 'mockups/tshirt/tshirt.png', blend: 'multiply' },
-    { role: 'Background', type: 'background', key: 'lightBg' }
+    { role: 'Background', type: 'background', key: 'lightBg', src: 'mockups/tshirt/background.png' }
   ]},
 ];
 
@@ -1838,8 +1838,8 @@ async function renderMockup(def, container) {
   card.appendChild(canvas);
   container.appendChild(card);
 
-  // Load all objectColor layer images
-  const imgLayers = layers.filter(l => l.type === 'objectColor' && l.src);
+  // Load all layer images
+  const imgLayers = layers.filter(l => l.src);
   await Promise.all(imgLayers.map(l =>
     loadImage(l.src).then(img => { l._img = img; })
   ));
@@ -1862,11 +1862,16 @@ function drawMockup(entry) {
   ctx.globalCompositeOperation = 'source-over';
   ctx.clearRect(0, 0, w, h);
 
-  // Background layer
+  // Background layer: color fill + optional image (shadow etc.) via multiply
   const bgLayer = layers.find(l => l.type === 'background');
   if (bgLayer) {
     ctx.fillStyle = pickers[bgLayer.key].color.hexString;
     ctx.fillRect(0, 0, w, h);
+    if (bgLayer._img) {
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.drawImage(bgLayer._img, 0, 0, w, h);
+      ctx.globalCompositeOperation = 'source-over';
+    }
   }
 
   // Draw objectColor layers: multiply first, then overlays on top
