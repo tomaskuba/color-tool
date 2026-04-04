@@ -707,6 +707,91 @@
       .contrast-grid { grid-template-columns: 1fr; }
       .shades-grid { grid-template-columns: 1fr; }
     }
+
+    /* Mockup Previews */
+    .mockup-section { margin-top: 24px; }
+    .mockup-section .shades-header { margin-bottom: 12px; }
+    .mockup-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+      gap: 16px;
+    }
+    .mockup-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .mockup-card-label {
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .mockup-layer-ctrl {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .mockup-ctrl-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+    .mockup-ctrl-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    .mockup-ctrl-select {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-on-surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .mockup-frame {
+      position: relative;
+      width: 100%;
+      isolation: isolate;
+      background: #888;
+      line-height: 0;
+    }
+    .mockup-frame.loading { opacity: 0.4; }
+    .mockup-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .mockup-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+    }
+    .mockup-layer-color {
+      width: 100%;
+      height: 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-size: 100% 100%;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+    }
+    .mockup-sizer {
+      width: 100%;
+      display: block;
+      visibility: hidden;
+    }
   </style>
 </head>
 <body>
@@ -889,6 +974,14 @@
     </label>
   </div>
   <div class="shade-text-grid hide-ratings" id="shadeTextGrid"></div>
+</div>
+
+<!-- Mockup Previews -->
+<div class="mockup-section">
+  <div class="shades-header">
+    <h2>Mockup Previews</h2>
+  </div>
+  <div class="mockup-gallery" id="mockupGallery"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1183,6 +1276,7 @@ function updateAllPreviews() {
 
   updateShades();
   updateShadeTextPreviews();
+  updateMockupColors();
 }
 
 // --- Tints & Shades ---
@@ -1478,7 +1572,8 @@ function buildFullState() {
     shadesRatings: shadesRatingsToggle.checked,
     shadesLabels: shadesLabelsToggle.checked,
     shadeTextRatings: shadeTextRatingsToggle.checked,
-    theme: document.documentElement.getAttribute('data-theme') || 'dark'
+    theme: document.documentElement.getAttribute('data-theme') || 'dark',
+    mockupAssignments: getMockupAssignments()
   };
 }
 document.getElementById('shareBtn').addEventListener('click', () => {
@@ -1590,6 +1685,7 @@ function restoreState() {
       }
       restoreToggles(source);
       if (source.theme) applyTheme(source.theme);
+      if (source.mockupAssignments) applyMockupAssignments(source.mockupAssignments);
     }
     // Clean URL to simple color hash if it had config
     if (hashColors.config) updateHash();
@@ -1618,6 +1714,7 @@ function restoreState() {
       fontSizeLabel.textContent = state.fontSize + 'px';
     }
     restoreToggles(state);
+    if (state.mockupAssignments) applyMockupAssignments(state.mockupAssignments);
     syncAllHexInputs();
   } catch (e) { /* ignore corrupt data */ }
 }
@@ -1658,6 +1755,201 @@ if ('EyeDropper' in window) {
     });
   });
 }
+
+// --- Mockup Previews ---
+const COLOR_OPTIONS = [
+  { value: 'primary', label: 'Primary' },
+  { value: 'secondary', label: 'Secondary' },
+  { value: 'darkBg', label: 'Dark' },
+  { value: 'lightBg', label: 'Light' }
+];
+
+const MOCKUP_DEFS = [
+  { id: 'tshirt', layers: [
+    { role: 'Text', type: 'objectColor', key: 'lightBg', src: 'mockups/tshirt/text.png', blend: 'overlay' },
+    { role: 'T-shirt', type: 'objectColor', key: 'primary', src: 'mockups/tshirt/tshirt.png', blend: 'multiply' },
+    { role: 'Background', type: 'background', key: 'lightBg' }
+  ]},
+];
+
+const mockupCanvases = [];
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+async function renderMockup(def, container) {
+  const card = document.createElement('div');
+  card.className = 'mockup-card';
+
+  // Deep-clone layers for runtime mutation
+  const layers = def.layers.map(l => ({ ...l }));
+  const swatches = [];
+
+  // Build header with layer controls
+  const header = document.createElement('div');
+  header.className = 'mockup-card-label';
+
+  layers.forEach((layer, i) => {
+    const ctrl = document.createElement('span');
+    ctrl.className = 'mockup-layer-ctrl';
+
+    const lbl = document.createElement('span');
+    lbl.className = 'mockup-ctrl-label';
+    lbl.textContent = layer.role;
+
+    const swatch = document.createElement('span');
+    swatch.className = 'mockup-ctrl-swatch';
+    swatch.style.backgroundColor = pickers[layer.key].color.hexString;
+
+    const select = document.createElement('select');
+    select.className = 'mockup-ctrl-select';
+    COLOR_OPTIONS.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt.value;
+      o.textContent = opt.label;
+      if (opt.value === layer.key) o.selected = true;
+      select.appendChild(o);
+    });
+
+    select.addEventListener('change', () => {
+      layer.key = select.value;
+      swatch.style.backgroundColor = pickers[layer.key].color.hexString;
+      drawMockup(entry);
+      debouncedPersist();
+    });
+
+    swatches.push({ el: swatch, layer, select });
+    ctrl.append(lbl, swatch, select);
+    header.appendChild(ctrl);
+  });
+
+  card.appendChild(header);
+
+  const canvas = document.createElement('canvas');
+  canvas.style.width = '100%';
+  canvas.style.display = 'block';
+  canvas.style.borderRadius = '0 0 12px 12px';
+  card.appendChild(canvas);
+  container.appendChild(card);
+
+  // Load all objectColor layer images
+  const imgLayers = layers.filter(l => l.type === 'objectColor' && l.src);
+  await Promise.all(imgLayers.map(l =>
+    loadImage(l.src).then(img => { l._img = img; })
+  ));
+
+  const firstImg = imgLayers[0]._img;
+  const scale = Math.min(1, 1200 / Math.max(firstImg.width, firstImg.height));
+  const w = Math.round(firstImg.width * scale);
+  const h = Math.round(firstImg.height * scale);
+  canvas.width = w;
+  canvas.height = h;
+
+  const entry = { id: def.id, canvas, layers, swatches, w, h };
+  mockupCanvases.push(entry);
+  drawMockup(entry);
+}
+
+function drawMockup(entry) {
+  const { canvas, layers, w, h } = entry;
+  const ctx = canvas.getContext('2d');
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.clearRect(0, 0, w, h);
+
+  // Background layer
+  const bgLayer = layers.find(l => l.type === 'background');
+  if (bgLayer) {
+    ctx.fillStyle = pickers[bgLayer.key].color.hexString;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  // Draw objectColor layers: multiply first, then overlays on top
+  const multiplyLayers = layers.filter(l => l.type === 'objectColor' && l._img && l.blend === 'multiply');
+  const overlayLayers = layers.filter(l => l.type === 'objectColor' && l._img && l.blend === 'overlay');
+
+  // Multiply layers: draw white object, then multiply colored version (preserves shadows)
+  multiplyLayers.forEach(layer => {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(layer._img, 0, 0, w, h);
+
+    const tmp = document.createElement('canvas');
+    tmp.width = w;
+    tmp.height = h;
+    const tctx = tmp.getContext('2d');
+    tctx.fillStyle = pickers[layer.key].color.hexString;
+    tctx.fillRect(0, 0, w, h);
+    tctx.globalCompositeOperation = 'destination-in';
+    tctx.drawImage(layer._img, 0, 0, w, h);
+
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.drawImage(tmp, 0, 0);
+  });
+
+  // Overlay layers: draw colored shape directly on top (no white base, no moiré)
+  overlayLayers.forEach(layer => {
+    const tmp = document.createElement('canvas');
+    tmp.width = w;
+    tmp.height = h;
+    const tctx = tmp.getContext('2d');
+    tctx.fillStyle = pickers[layer.key].color.hexString;
+    tctx.fillRect(0, 0, w, h);
+    tctx.globalCompositeOperation = 'destination-in';
+    tctx.drawImage(layer._img, 0, 0, w, h);
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(tmp, 0, 0);
+  });
+
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+function updateMockupColors() {
+  mockupCanvases.forEach(entry => {
+    drawMockup(entry);
+    entry.swatches.forEach(({ el, layer }) => {
+      el.style.backgroundColor = pickers[layer.key].color.hexString;
+    });
+  });
+}
+
+function getMockupAssignments() {
+  const assignments = {};
+  mockupCanvases.forEach(entry => {
+    assignments[entry.id] = entry.layers.map(l => ({ role: l.role, type: l.type, key: l.key }));
+  });
+  return assignments;
+}
+
+function applyMockupAssignments(assignments) {
+  mockupCanvases.forEach(entry => {
+    const saved = assignments[entry.id];
+    if (!saved) return;
+    entry.layers.forEach((layer, i) => {
+      if (saved[i] && saved[i].key) {
+        layer.key = saved[i].key;
+      }
+    });
+    // Update select values and swatches
+    entry.swatches.forEach(({ el, layer, select }) => {
+      select.value = layer.key;
+      el.style.backgroundColor = pickers[layer.key].color.hexString;
+    });
+    drawMockup(entry);
+  });
+}
+
+function initMockups() {
+  const gallery = document.getElementById('mockupGallery');
+  MOCKUP_DEFS.forEach(def => renderMockup(def, gallery));
+}
+
+initMockups();
 
 // --- Init ---
 restoreState();
