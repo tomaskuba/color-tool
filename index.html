@@ -153,11 +153,18 @@
     .picker-card {
       background: var(--bg-surface);
       border-radius: 12px;
-      padding: 16px;
+      padding: 16px 16px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 12px;
+      overflow: hidden;
+    }
+    .picker-swatch {
+      width: calc(100% + 32px);
+      height: 60px;
+      margin: 0 -16px;
+      border-radius: 0 0 12px 12px;
     }
 
     .picker-card h3 {
@@ -713,7 +720,7 @@
     .mockup-section .shades-header { margin-bottom: 12px; }
     .mockup-gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(520px, 100%), 1fr));
       gap: 16px;
     }
     .mockup-card {
@@ -723,29 +730,29 @@
       overflow: hidden;
     }
     .mockup-card-label {
-      padding: 8px 12px;
+      padding: 6px 10px;
       font-size: 12px;
       color: var(--text-secondary);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 2px 10px;
       flex-wrap: wrap;
     }
     .mockup-layer-ctrl {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .mockup-ctrl-label {
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       color: var(--text-secondary);
     }
     .mockup-ctrl-swatch {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       border: 1px solid var(--border-color);
       flex-shrink: 0;
@@ -754,9 +761,9 @@
       background: var(--bg-input);
       border: 1px solid var(--border-color);
       color: var(--text-on-surface);
-      padding: 2px 6px;
+      padding: 1px 4px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 11px;
     }
     .mockup-frame {
       position: relative;
@@ -850,6 +857,7 @@
       <input class="hex-input" id="hexPrimary" value="#e8192c" spellcheck="false">
       <button class="btn-copy" data-target="hexPrimary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="primary" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
+    <div class="picker-swatch" id="swatchPrimary"></div>
   </div>
   <div class="picker-card">
     <h3>Secondary</h3>
@@ -858,6 +866,7 @@
       <input class="hex-input" id="hexSecondary" value="#00c8d5" spellcheck="false">
       <button class="btn-copy" data-target="hexSecondary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="secondary" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
+    <div class="picker-swatch" id="swatchSecondary"></div>
   </div>
   <div class="picker-card">
     <h3>Dark Background</h3>
@@ -866,6 +875,7 @@
       <input class="hex-input" id="hexDarkBg" value="#000000" spellcheck="false">
       <button class="btn-copy" data-target="hexDarkBg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="darkBg" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
+    <div class="picker-swatch" id="swatchDarkBg"></div>
   </div>
   <div class="picker-card">
     <h3>Light Background</h3>
@@ -874,6 +884,7 @@
       <input class="hex-input" id="hexLightBg" value="#ffffff" spellcheck="false">
       <button class="btn-copy" data-target="hexLightBg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="btn-pick" data-picker="lightBg" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-1-1L12 14"/></svg></button>
     </div>
+    <div class="picker-swatch" id="swatchLightBg"></div>
   </div>
   <div class="viz-card">
     <h3>Color Wheel</h3>
@@ -1161,10 +1172,19 @@ const pickerHexMap = {
   lightBg: 'hexLightBg'
 };
 
+const swatchMap = { primary: 'swatchPrimary', secondary: 'swatchSecondary', darkBg: 'swatchDarkBg', lightBg: 'swatchLightBg' };
+
+function updatePickerSwatches() {
+  for (const [key, id] of Object.entries(swatchMap)) {
+    document.getElementById(id).style.backgroundColor = pickers[key].color.hexString;
+  }
+}
+
 function syncAllHexInputs() {
   for (const [key, inputId] of Object.entries(pickerHexMap)) {
     document.getElementById(inputId).value = pickers[key].color.hexString;
   }
+  updatePickerSwatches();
 }
 
 function updateVizWheel() {
@@ -1177,6 +1197,7 @@ function updateVizWheel() {
 for (const [key, inputId] of Object.entries(pickerHexMap)) {
   pickers[key].on('color:change', () => {
     document.getElementById(inputId).value = pickers[key].color.hexString;
+    document.getElementById(swatchMap[key]).style.backgroundColor = pickers[key].color.hexString;
     updateAllPreviews();
     updateVizWheel();
     debouncedPersist();
@@ -1558,6 +1579,7 @@ function applyTheme(theme) {
 themeToggle.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme') || 'dark';
   applyTheme(current === 'dark' ? 'light' : 'dark');
+  debouncedPersist();
 });
 applyTheme(sessionStorage.getItem('brand-color-tool-theme') || 'dark');
 
@@ -1714,6 +1736,7 @@ function restoreState() {
       fontSizeLabel.textContent = state.fontSize + 'px';
     }
     restoreToggles(state);
+    if (state.theme) applyTheme(state.theme);
     if (state.mockupAssignments) applyMockupAssignments(state.mockupAssignments);
     syncAllHexInputs();
   } catch (e) { /* ignore corrupt data */ }
@@ -1766,9 +1789,16 @@ const COLOR_OPTIONS = [
 
 const MOCKUP_DEFS = [
   { id: 'tshirt', layers: [
-    { role: 'Text', type: 'objectColor', key: 'lightBg', src: 'mockups/tshirt/text.png', blend: 'overlay' },
-    { role: 'T-shirt', type: 'objectColor', key: 'primary', src: 'mockups/tshirt/tshirt.png', blend: 'multiply' },
-    { role: 'Background', type: 'background', key: 'lightBg', src: 'mockups/tshirt/background.png' }
+    { role: 'Text', type: 'objectColor', key: 'primary', src: 'mockups/tshirt/text.png', blend: 'overlay' },
+    { role: 'T-shirt', type: 'objectColor', key: 'lightBg', src: 'mockups/tshirt/tshirt.png', blend: 'multiply' },
+    { role: 'BG', type: 'background', key: 'secondary', src: 'mockups/tshirt/background.png' }
+  ]},
+  { id: 'sticky-notes', layers: [
+    { role: 'Text', type: 'objectColor', key: 'primary', src: 'mockups/sticky-notes/text.png', blend: 'overlay' },
+    { role: 'Edges', type: 'objectColor', key: 'secondary', src: 'mockups/sticky-notes/edges.png', blend: 'multiply' },
+    { role: 'Paper', type: 'objectColor', key: 'lightBg', src: 'mockups/sticky-notes/notes.png', blend: 'multiply' },
+    { role: 'Case', type: 'static', src: 'mockups/sticky-notes/case.png', blend: 'multiply' },
+    { role: 'BG', type: 'background', key: 'lightBg', src: 'mockups/sticky-notes/background.png' }
   ]},
 ];
 
@@ -1795,7 +1825,7 @@ async function renderMockup(def, container) {
   const header = document.createElement('div');
   header.className = 'mockup-card-label';
 
-  layers.forEach((layer, i) => {
+  layers.filter(l => l.type !== 'static').forEach((layer, i) => {
     const ctrl = document.createElement('span');
     ctrl.className = 'mockup-layer-ctrl';
 
@@ -1854,6 +1884,10 @@ async function renderMockup(def, container) {
   const entry = { id: def.id, canvas, layers, swatches, w, h };
   mockupCanvases.push(entry);
   drawMockup(entry);
+  // Update swatches after draw (pickers may have been restored by now)
+  swatches.forEach(({ el, layer }) => {
+    el.style.backgroundColor = pickers[layer.key].color.hexString;
+  });
 }
 
 function drawMockup(entry) {
@@ -1874,50 +1908,40 @@ function drawMockup(entry) {
     }
   }
 
-  // Draw objectColor layers: multiply first, then overlays on top
-  const multiplyLayers = layers.filter(l => l.type === 'objectColor' && l._img && l.blend === 'multiply');
-  const overlayLayers = layers.filter(l => l.type === 'objectColor' && l._img && l.blend === 'overlay');
+  // Draw non-background layers in definition order (reversed: last = bottom)
+  const drawLayers = layers.filter(l => l.type !== 'background' && l._img).reverse();
+  drawLayers.forEach(layer => {
+    if (layer.type === 'static') {
+      // Static: draw directly on main canvas (multiply with background works correctly)
+      ctx.globalCompositeOperation = layer.blend || 'source-over';
+      ctx.drawImage(layer._img, 0, 0, w, h);
+      ctx.globalCompositeOperation = 'source-over';
 
-  // Multiply layers: compose color × object on temp canvas, then draw result (no white fringe)
-  multiplyLayers.forEach(layer => {
-    const tmp = document.createElement('canvas');
-    tmp.width = w;
-    tmp.height = h;
-    const tctx = tmp.getContext('2d');
+    } else if (layer.type === 'objectColor' && layer.blend === 'overlay') {
+      // Overlay: color clipped to shape
+      const tmp = document.createElement('canvas');
+      tmp.width = w; tmp.height = h;
+      const tctx = tmp.getContext('2d');
+      tctx.fillStyle = pickers[layer.key].color.hexString;
+      tctx.fillRect(0, 0, w, h);
+      tctx.globalCompositeOperation = 'destination-in';
+      tctx.drawImage(layer._img, 0, 0, w, h);
+      ctx.drawImage(tmp, 0, 0);
 
-    // Draw white object on temp canvas
-    tctx.drawImage(layer._img, 0, 0, w, h);
-
-    // Multiply color onto it (white becomes color, shadows darken)
-    tctx.globalCompositeOperation = 'multiply';
-    tctx.fillStyle = pickers[layer.key].color.hexString;
-    tctx.fillRect(0, 0, w, h);
-
-    // Clip to original alpha shape
-    tctx.globalCompositeOperation = 'destination-in';
-    tctx.drawImage(layer._img, 0, 0, w, h);
-
-    // Draw finished colored object onto main canvas
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(tmp, 0, 0);
+    } else if (layer.type === 'objectColor' && layer.blend === 'multiply') {
+      // Multiply: white object × color, clipped to alpha, drawn source-over
+      const tmp = document.createElement('canvas');
+      tmp.width = w; tmp.height = h;
+      const tctx = tmp.getContext('2d');
+      tctx.drawImage(layer._img, 0, 0, w, h);
+      tctx.globalCompositeOperation = 'multiply';
+      tctx.fillStyle = pickers[layer.key].color.hexString;
+      tctx.fillRect(0, 0, w, h);
+      tctx.globalCompositeOperation = 'destination-in';
+      tctx.drawImage(layer._img, 0, 0, w, h);
+      ctx.drawImage(tmp, 0, 0);
+    }
   });
-
-  // Overlay layers: draw colored shape directly on top (no white base, no moiré)
-  overlayLayers.forEach(layer => {
-    const tmp = document.createElement('canvas');
-    tmp.width = w;
-    tmp.height = h;
-    const tctx = tmp.getContext('2d');
-    tctx.fillStyle = pickers[layer.key].color.hexString;
-    tctx.fillRect(0, 0, w, h);
-    tctx.globalCompositeOperation = 'destination-in';
-    tctx.drawImage(layer._img, 0, 0, w, h);
-
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(tmp, 0, 0);
-  });
-
-  ctx.globalCompositeOperation = 'source-over';
 }
 
 function updateMockupColors() {
