@@ -1873,21 +1873,27 @@ function drawMockup(entry) {
   const multiplyLayers = layers.filter(l => l.type === 'objectColor' && l._img && l.blend === 'multiply');
   const overlayLayers = layers.filter(l => l.type === 'objectColor' && l._img && l.blend === 'overlay');
 
-  // Multiply layers: draw white object, then multiply colored version (preserves shadows)
+  // Multiply layers: compose color × object on temp canvas, then draw result (no white fringe)
   multiplyLayers.forEach(layer => {
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(layer._img, 0, 0, w, h);
-
     const tmp = document.createElement('canvas');
     tmp.width = w;
     tmp.height = h;
     const tctx = tmp.getContext('2d');
+
+    // Draw white object on temp canvas
+    tctx.drawImage(layer._img, 0, 0, w, h);
+
+    // Multiply color onto it (white becomes color, shadows darken)
+    tctx.globalCompositeOperation = 'multiply';
     tctx.fillStyle = pickers[layer.key].color.hexString;
     tctx.fillRect(0, 0, w, h);
+
+    // Clip to original alpha shape
     tctx.globalCompositeOperation = 'destination-in';
     tctx.drawImage(layer._img, 0, 0, w, h);
 
-    ctx.globalCompositeOperation = 'multiply';
+    // Draw finished colored object onto main canvas
+    ctx.globalCompositeOperation = 'source-over';
     ctx.drawImage(tmp, 0, 0);
   });
 
