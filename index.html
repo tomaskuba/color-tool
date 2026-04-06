@@ -175,6 +175,10 @@
       border-radius: 0 0 12px 12px;
     }
 
+    .picker-card .IroWheel {
+      margin: 0 auto;
+    }
+
     .picker-card h3 {
       font-size: 13px;
       font-weight: 500;
@@ -1151,9 +1155,9 @@ const pickerConfig = (el, color) => ({
   color,
   layout: [
     { component: iro.ui.Wheel },
-    { component: iro.ui.Slider, options: { sliderType: 'hue', sliderLength: 220 } },
-    { component: iro.ui.Slider, options: { sliderType: 'saturation', sliderLength: 220 } },
-    { component: iro.ui.Slider, options: { sliderType: 'value', sliderLength: 220 } }
+    { component: iro.ui.Slider, options: { sliderType: 'hue', width: 280 } },
+    { component: iro.ui.Slider, options: { sliderType: 'saturation', width: 280 } },
+    { component: iro.ui.Slider, options: { sliderType: 'value', width: 280 } }
   ]
 });
 
