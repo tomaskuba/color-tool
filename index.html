@@ -1151,9 +1151,9 @@ const pickerConfig = (el, color) => ({
   color,
   layout: [
     { component: iro.ui.Wheel },
-    { component: iro.ui.Slider, options: { sliderType: 'hue' } },
-    { component: iro.ui.Slider, options: { sliderType: 'saturation' } },
-    { component: iro.ui.Slider, options: { sliderType: 'value' } }
+    { component: iro.ui.Slider, options: { sliderType: 'hue', sliderLength: 220 } },
+    { component: iro.ui.Slider, options: { sliderType: 'saturation', sliderLength: 220 } },
+    { component: iro.ui.Slider, options: { sliderType: 'value', sliderLength: 220 } }
   ]
 });
 
